@@ -3,8 +3,9 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -114,7 +115,7 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     var risk = 0
-    if (kingX == rookX1 || kingY == rookY1) risk += 1
+    if (kingX == rookX1 || kingY == rookY1) risk = 1
     if (kingX == rookX2 || kingY == rookY2) {
         when (risk) {
             0 -> risk = 2
@@ -138,7 +139,17 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    var risk = 0
+    if (kingX == rookX || kingY == rookY) risk = 1
+    if (abs(kingX - bishopX) == abs(kingY - bishopY)) {
+        when (risk) {
+            0 -> risk = 2
+            1 -> risk = 3
+        }
+    }
+    return risk
+}
 
 /**
  * Простая (2 балла)
@@ -148,7 +159,11 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    //if (a + b < c || a + c < b || b + c < a) return -1
+    //if (sqr(a) + sqr(b) == sqr(c) || sqr(a) + sqr(c) == sqr(b) || sqr(c) + sqr(b) == sqr(a)) return 1
+    TODO()
+}
 
 /**
  * Средняя (3 балла)
