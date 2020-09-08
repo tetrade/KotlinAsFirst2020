@@ -81,6 +81,7 @@ fun circleInside(
         else -> sqrt(sqr((x1 - x2) + sqr(y1 - y2)))
     }
     return dist + r1 <= r2 && sqr(x1 - x2) + sqr(y1 - y2) < sqr(r2)
+    // не понимаю как тут может быть ошибка
 }
 
 /**
