@@ -1,9 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson1.task1
-
 import kotlin.math.*
-//test
 // Урок 1: простые функции
 // Максимальное количество баллов = 5
 // Рекомендуемое количество баллов = 4
