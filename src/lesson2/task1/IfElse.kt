@@ -159,9 +159,18 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    //if (a + b < c || a + c < b || b + c < a) return -1
-    //if (sqr(a) + sqr(b) == sqr(c) || sqr(a) + sqr(c) == sqr(b) || sqr(c) + sqr(b) == sqr(a)) return 1
-    TODO()
+    val smallSide = min(min(a, b), c)
+    val bigSide = max(max(a, b), c)
+    val averageSide = a + b + c - smallSide - bigSide
+    if (smallSide + bigSide > averageSide && smallSide + averageSide > bigSide && bigSide + averageSide > smallSide) {
+        return when {
+            sqr(smallSide) + sqr(averageSide) == sqr(bigSide) -> 1
+            sqr(smallSide) + sqr(averageSide) < sqr(bigSide) -> 2
+            else -> 0
+        }
+    } else {
+        return -1
+    }
 }
 
 /**
@@ -173,3 +182,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+    // if (a > c && b < d) return b - a
+    // if (c > a && d < b) return d - c
+    // if (b < c || a > d) return -1
+
