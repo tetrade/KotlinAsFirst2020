@@ -30,13 +30,7 @@ fun isNumberHappy(number: Int): Boolean =
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-    when {
-        x1 == x2 -> true
-        y1 == y2 -> true
-        abs(x1 - x2) == abs(y1 - y2) -> true
-        else -> false
-    }
-
+    x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2)
 
 /**
  * Простая (2 балла)
@@ -45,23 +39,14 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int =
-    when {
-        month == 1 -> 31
-        month == 2 && year % 400 == 0 -> 29
-        month == 2 && year % 100 == 0 -> 28
-        month == 2 && year % 4 == 0 -> 29
-        month == 2 -> 28
-        month == 3 -> 31
-        month == 4 -> 30
-        month == 5 -> 31
-        month == 6 -> 30
-        month == 7 -> 31
-        month == 8 -> 31
-        month == 9 -> 30
-        month == 10 -> 31
-        month == 11 -> 30
-        month == 12 -> 31
-        else -> 0
+    when (month) {
+        1, 3, 5, 7, 8, 10, 12 -> 31
+        4, 6, 9, 11 -> 30
+        else -> if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) 29 else 28
+        //month == 2 && year % 400 == 0 -> 29
+        //month == 2 && year % 100 == 0 -> 28
+        //month == 2 && year % 4 == 0 -> 29
+        //month == 2 -> 28
     }
 
 /**
@@ -88,10 +73,8 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-    when {
-        c <= s && (a <= r || b <= r) -> true
-        a <= s && (c <= r || b <= r) -> true
-        b <= s && (a <= r || c <= r) -> true
-        else -> false
-    }
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val minimal = minOf(a, b, c)
+    val average = a + b + c - minOf(a, b, c) - maxOf(a, b, c)
+    return minimal <= min(r, s) && average <= max(r, s)
+}

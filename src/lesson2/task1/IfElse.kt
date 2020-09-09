@@ -68,8 +68,8 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    if (age in 5..20 || age in 105..120) return "$age лет"
     return when {
+        age % 100 in 5..20 -> "$age лет"
         age % 10 == 1 -> "$age год"
         age % 10 in 2..4 -> "$age года"
         age % 10 in 5..9 || age % 10 == 0 -> "$age лет"
@@ -114,12 +114,7 @@ fun whichRookThreatens(
 ): Int {
     var risk = 0
     if (kingX == rookX1 || kingY == rookY1) risk = 1
-    if (kingX == rookX2 || kingY == rookY2) {
-        when (risk) {
-            0 -> risk = 2
-            1 -> risk = 3
-        }
-    }
+    if (kingX == rookX2 || kingY == rookY2) risk += 2
     return risk
 }
 
@@ -140,12 +135,7 @@ fun rookOrBishopThreatens(
 ): Int {
     var risk = 0
     if (kingX == rookX || kingY == rookY) risk = 1
-    if (abs(kingX - bishopX) == abs(kingY - bishopY)) {
-        when (risk) {
-            0 -> risk = 2
-            1 -> risk = 3
-        }
-    }
+    if (abs(kingX - bishopX) == abs(kingY - bishopY)) risk += 2
     return risk
 }
 
@@ -158,17 +148,14 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val smallSide = min(min(a, b), c)
-    val bigSide = max(max(a, b), c)
+    val smallSide = minOf(a, b, c)
+    val bigSide = maxOf(a, b, c)
     val averageSide = a + b + c - smallSide - bigSide
-    if (smallSide + bigSide > averageSide && smallSide + averageSide > bigSide && bigSide + averageSide > smallSide) {
-        return when {
-            sqr(smallSide) + sqr(averageSide) == sqr(bigSide) -> 1
-            sqr(smallSide) + sqr(averageSide) < sqr(bigSide) -> 2
-            else -> 0
-        }
-    } else {
-        return -1
+    return when {
+        smallSide + averageSide <= bigSide -> -1
+        sqr(smallSide) + sqr(averageSide) == sqr(bigSide) -> 1
+        sqr(smallSide) + sqr(averageSide) < sqr(bigSide) -> 2
+        else -> 0
     }
 }
 
@@ -181,10 +168,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if (b < c || a > d) return -1
-    if (a >= c && b <= d) return b - a
-    if (c >= a && d <= b) return d - c
     return when {
+        b < c || a > d -> -1
+        a >= c && b <= d -> b - a
+        c >= a && d <= b -> d - c
         a in c..d -> d - a
         b in c..d -> b - c
         else -> 123
