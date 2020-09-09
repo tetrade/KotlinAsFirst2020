@@ -204,13 +204,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
 fun revert(n: Int): Int {
     var number = n
     var countOfDigital = 0
-    var newNumber = 0
+    var newNumber = 0.0
     while (number > 0) {
         number /= 10
         countOfDigital++
     }
     number = n
-    return 0
+    while (countOfDigital != 0) {
+        newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
+        number /= 10
+        countOfDigital--
+    }
+    return newNumber.toInt()
 }
 
 /**
@@ -222,7 +227,23 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var number = n
+    var countOfDigital = 0
+    var newNumber = 0.0
+    while (number > 0) {
+        number /= 10
+        countOfDigital++
+    }
+    number = n
+
+    while (countOfDigital != 0) {
+        newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
+        number /= 10
+        countOfDigital--
+    }
+    return newNumber == n.toDouble()
+}
 
 /**
  * Средняя (3 балла)
@@ -244,7 +265,7 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double = TODO()
-
+// пока что не очень понял формулировку
 /**
  * Средняя (4 балла)
  *
@@ -255,7 +276,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
-
+// пока что не очень понял формулировку
 /**
  * Сложная (4 балла)
  *
@@ -265,7 +286,27 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var count = 1
+    var sqr = 1
+    var countOfDigital = 0
+    var number = 0
+    var seq = 1.0
+    while (n > count) {
+        sqr++
+        number = sqr * sqr  //
+        while (number > 0) {
+            number /= 10      //понимаю сколько цифр в след. числе
+            countOfDigital++
+        }
+        number = sqr * sqr
+        seq = seq * 10.0.pow(countOfDigital) + number
+        count += countOfDigital
+        countOfDigital = 0
+        println(seq)
+    }
+    return seq.toInt()
+}
 
 /**
  * Сложная (5 баллов)
