@@ -99,7 +99,6 @@ fun fib(n: Int): Int {
         number2 += buff
     }
     return number1
-   //if (n == 1 || n == 2) 1 else fib(n - 1) + fib(n - 2)
 }
 
 
