@@ -76,7 +76,7 @@ fun digitNumber(n: Int): Int {
     var number = n
     var countOfDigital = 0
     if (n == 0) return 1
-    while (number > 0) {
+    while (abs(number) > 0) {
         number /= 10
         countOfDigital++
     }
@@ -90,8 +90,18 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    return if (n == 1 || n == 2) 1 else fib(n - 1) + fib(n - 2)
+    var number1 = 0
+    var number2 = 1
+    var buff = 0
+    for (i in 1..n) {
+        buff = number1
+        number1 = number2
+        number2 += buff
+    }
+    return number1
+   //if (n == 1 || n == 2) 1 else fib(n - 1) + fib(n - 2)
 }
+
 
 /**
  * Простая (2 балла)
@@ -156,11 +166,12 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = min(m, n)
-    while (true) {
-        if (k % m == 0 && k % n == 0) return k
-        k++
+    var x1 = m
+    var x2 = n
+    while (x1 != x2) {
+        if (x1 > x2) x1 -= x2 else x2 -= x1
     }
+    return m * n / x1
 }
 
 /**
@@ -185,7 +196,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k = 0
+    var k: Long = 0
     while (k * k <= n) {
         if (k * k in m..n) return true
         k++

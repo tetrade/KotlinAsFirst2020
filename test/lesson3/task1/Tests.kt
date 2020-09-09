@@ -65,6 +65,7 @@ class Tests {
     @Test
     @Tag("2")
     fun digitNumber() {
+        assertEquals(1, digitNumber(-1))
         assertEquals(1, digitNumber(1))
         assertEquals(1, digitNumber(0))
         assertEquals(1, digitNumber(7))
@@ -76,7 +77,7 @@ class Tests {
 
     @Test
     @Tag("2")
-    fun fib() {
+    fun m() {
         assertEquals(1, fib(1))
         assertEquals(1, fib(2))
         assertEquals(2, fib(3))
