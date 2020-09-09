@@ -65,6 +65,7 @@ class Tests {
     @Test
     @Tag("2")
     fun digitNumber() {
+        assertEquals(1, digitNumber(1))
         assertEquals(1, digitNumber(0))
         assertEquals(1, digitNumber(7))
         assertEquals(2, digitNumber(10))
@@ -177,6 +178,8 @@ class Tests {
         assertEquals(111, revert(111))
         assertEquals(17571, revert(17571))
         assertEquals(123456789, revert(987654321))
+        assertEquals(1, revert(1))
+
     }
 
     @Test
@@ -228,9 +231,9 @@ class Tests {
     @Test
     @Tag("4")
     fun squareSequenceDigit() {
-       // assertEquals(1, squareSequenceDigit(1))
-       // assertEquals(4, squareSequenceDigit(2))
-        //assertEquals(5, squareSequenceDigit(7))
+        assertEquals(1, squareSequenceDigit(1))
+        assertEquals(4, squareSequenceDigit(2))
+        assertEquals(5, squareSequenceDigit(7))
         assertEquals(6, squareSequenceDigit(12))
         assertEquals(0, squareSequenceDigit(17))
         assertEquals(9, squareSequenceDigit(27))

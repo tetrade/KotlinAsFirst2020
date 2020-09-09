@@ -3,7 +3,6 @@
 package lesson3.task1
 
 import kotlin.math.*
-import java.lang.Math
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -287,26 +286,25 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var count = 1
-    var sqr = 1
+    var generalCount = 0
+    var squ = 0
     var countOfDigital = 0
-    var number = 0
-    var seq = 1.0
-    while (n > count) {
-        sqr++
-        number = sqr * sqr  //
-        while (number > 0) {
-            number /= 10      //понимаю сколько цифр в след. числе
+    var lastNumber = 0
+    while (n > generalCount) {
+        squ++
+        lastNumber = squ * squ
+        while (lastNumber > 0) {
+            lastNumber /= 10
             countOfDigital++
         }
-        number = sqr * sqr
-        seq = seq * 10.0.pow(countOfDigital) + number
-        count += countOfDigital
+        lastNumber = squ * squ
+        generalCount += countOfDigital
         countOfDigital = 0
-        println(seq)
     }
-    return seq.toInt()
+    for (i in generalCount downTo n) lastNumber /= 10
+    return lastNumber % 10
 }
+
 
 /**
  * Сложная (5 баллов)
