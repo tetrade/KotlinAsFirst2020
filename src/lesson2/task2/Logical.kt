@@ -75,13 +75,8 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    val dist = when {
-        x1 == x2 -> abs(y1 - y2)
-        y1 == y2 -> abs(x1 - x2)
-        else -> sqrt(sqr((x1 - x2) + sqr(y1 - y2)))
-    }
-    return dist + r1 <= r2 && sqr(x1 - x2) + sqr(y1 - y2) < sqr(r2)
-    // не понимаю как тут может быть ошибка
+    val dist = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+    return dist + r1 <= r2
 }
 
 /**

@@ -140,7 +140,7 @@ fun collatzSteps(x: Int): Int {
     var number = x
     var count = 0
     while (number != 1) {
-        if (x % 2 == 0) {
+        if (number % 2 == 0) {
             number /= 2
         } else {
             number = 3 * number + 1
@@ -210,10 +210,7 @@ fun revert(n: Int): Int {
         countOfDigital++
     }
     number = n
-    while (number > 0) {
-        newNumber += Math.pow()
-    }
-
+    return 0
 }
 
 /**
