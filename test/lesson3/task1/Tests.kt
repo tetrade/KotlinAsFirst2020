@@ -77,7 +77,7 @@ class Tests {
 
     @Test
     @Tag("2")
-    fun m() {
+    fun fib() {
         assertEquals(1, fib(1))
         assertEquals(1, fib(2))
         assertEquals(2, fib(3))
