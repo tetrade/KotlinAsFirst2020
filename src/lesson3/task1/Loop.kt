@@ -301,7 +301,7 @@ fun squareSequenceDigit(n: Int): Int {
         generalCount += countOfDigital
         countOfDigital = 0
     }
-    for (i in generalCount downTo n) lastNumber /= 10
+    for (i in generalCount  downTo n + 1) lastNumber /= 10
     return lastNumber % 10
 }
 
