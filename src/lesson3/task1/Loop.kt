@@ -311,7 +311,7 @@ fun squareSequenceDigit(n: Int): Int {
         generalCount += countOfDigital
         countOfDigital = 0
     }
-    for (i in generalCount  downTo n + 1) lastNumber /= 10
+    for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
 }
 
@@ -325,4 +325,23 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+
+fun fibSequenceDigit(n: Int): Int {
+    var generalCount = 0
+    var squ = 0
+    var countOfDigital = 0
+    var lastNumber = 0
+    while (n > generalCount) {
+        squ++
+        lastNumber = fib(squ)
+        while (lastNumber > 0) {
+            lastNumber /= 10
+            countOfDigital++
+        }
+        lastNumber = fib(squ)
+        generalCount += countOfDigital
+        countOfDigital = 0
+    }
+    for (i in generalCount downTo n + 1) lastNumber /= 10
+    return lastNumber % 10
+}
