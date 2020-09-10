@@ -137,7 +137,11 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    var av = list.sum() / list.size
+    for (i in 0 until list.size) list[i] -= av
+    return list
+}
 
 /**
  * Средняя (3 балла)
