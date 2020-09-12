@@ -259,6 +259,7 @@ fun convert(n: Int, base: Int): List<Int> {
         newNumber.add(num % base)
         num /= base
     }
+    if (newNumber.isEmpty()) return listOf(num)
     return newNumber.reversed()
 }
 
@@ -280,6 +281,7 @@ fun convertToString(n: Int, base: Int): String {
         newNumber.add(if (num % base <= 9) "${num % base}" else "${(96 + (num % base - 9)).toChar()}")
         num /= base
     }
+    if (newNumber.isEmpty()) return "0"
     return newNumber.reversed().joinToString(separator = "")
 }
 
