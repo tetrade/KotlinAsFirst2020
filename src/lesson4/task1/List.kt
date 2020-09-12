@@ -277,7 +277,7 @@ fun convertToString(n: Int, base: Int): String {
     var num = n
     var newNumber = mutableListOf<String>()
     while (num > 0) {
-        newNumber.add(if (num % base <= 9) "${num % base}" else "${(64 + (num % base - 9)).toChar().toLowerCase()}")
+        newNumber.add(if (num % base <= 9) "${num % base}" else "${(96 + (num % base - 9)).toChar()}")
         num /= base
     }
     return newNumber.reversed().joinToString(separator = "")
@@ -310,7 +310,15 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var mas = mutableListOf<Int>()
+    var newNumber = 0.0
+    for (i in str.indices) {
+        mas.add(if (str[i].toInt() in 48..57) str[i].toInt() - 48 else str[i].toInt() - 87)
+        newNumber += mas[i] * base.toDouble().pow(str.length - 1 - i)
+    }
+    return newNumber.toInt()
+}
 
 /**
  * Сложная (5 баллов)
