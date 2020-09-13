@@ -289,7 +289,6 @@ fun squareSequenceDigit(n: Int): Int {
         lastNumber = squ * squ
         countOfDigital = digitNumber(lastNumber)
         generalCount += countOfDigital
-        countOfDigital = 0
     }
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
@@ -316,7 +315,6 @@ fun fibSequenceDigit(n: Int): Int {
         lastNumber = fib(squ)
         countOfDigital = digitNumber(lastNumber)
         generalCount += countOfDigital
-        countOfDigital = 0
     }
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
