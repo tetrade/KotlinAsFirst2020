@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER")
 
 package lesson2.task1
+
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
 import kotlin.math.*
@@ -167,16 +168,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return when {
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    when {
         b < c || a > d -> -1
-        a >= c && b <= d -> b - a
-        a <= c && b >= d -> d - c
-        a in c..d -> d - a
-        b in c..d -> b - c
-        else -> 123
+        else -> max(0, min(b, d) - max(a, c))
     }
-}
 
 
 
