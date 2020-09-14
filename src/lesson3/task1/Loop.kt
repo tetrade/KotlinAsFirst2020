@@ -74,8 +74,8 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var number = abs(n)
-    var countOfDigital = 0
-    while (number > 0) {
+    var countOfDigital = 1
+    while (number > 9) {
         number /= 10
         countOfDigital++
     }
@@ -108,10 +108,11 @@ fun fib(n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var minDivisor = 2
-    while (true) {
+    while (minDivisor <= sqrt(n.toDouble())) {
         if (n % minDivisor == 0) return minDivisor
         minDivisor++
     }
+    return if (n % minDivisor == 0) minDivisor else n
 }
 
 /**
@@ -120,7 +121,7 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var maxDivisor = n - 1
+    var maxDivisor = n / 2
     while (true) {
         if (n % maxDivisor == 0) return maxDivisor
         maxDivisor--
@@ -179,12 +180,7 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    for (k in 2..min(n, m)) {
-        if (m % k == 0 && n % k == 0) return false
-    }
-    return true
-}
+fun isCoPrime(m: Int, n: Int): Boolean = m * n / lcm(m, n) == 1
 
 /**
  * Средняя (3 балла)
@@ -211,7 +207,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var number = n
-    var countOfDigital = digitNumber(number)
+    var countOfDigital = digitNumber(n)
     var newNumber = 0.0
     while (countOfDigital != 0) {
         newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
@@ -232,14 +228,8 @@ fun revert(n: Int): Int {
  */
 fun isPalindrome(n: Int): Boolean {
     var number = n
-    var countOfDigital = 0
+    var countOfDigital = digitNumber(n)
     var newNumber = 0.0
-    while (number > 0) {
-        number /= 10
-        countOfDigital++
-    }
-    number = n
-
     while (countOfDigital != 0) {
         newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
         number /= 10
@@ -297,13 +287,8 @@ fun squareSequenceDigit(n: Int): Int {
     while (n > generalCount) {
         squ++
         lastNumber = squ * squ
-        while (lastNumber > 0) {
-            lastNumber /= 10
-            countOfDigital++
-        }
-        lastNumber = squ * squ
+        countOfDigital = digitNumber(lastNumber)
         generalCount += countOfDigital
-        countOfDigital = 0
     }
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
@@ -328,13 +313,8 @@ fun fibSequenceDigit(n: Int): Int {
     while (n > generalCount) {
         squ++
         lastNumber = fib(squ)
-        while (lastNumber > 0) {
-            lastNumber /= 10
-            countOfDigital++
-        }
-        lastNumber = fib(squ)
+        countOfDigital = digitNumber(lastNumber)
         generalCount += countOfDigital
-        countOfDigital = 0
     }
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10

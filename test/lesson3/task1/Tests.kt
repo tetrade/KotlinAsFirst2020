@@ -93,6 +93,7 @@ class Tests {
     fun minDivisor() {
         assertEquals(2, minDivisor(2))
         assertEquals(3, minDivisor(75))
+        assertEquals(7, minDivisor(49))
         assertEquals(5, minDivisor(75 / 3))
         assertEquals(97, minDivisor(97))
         assertEquals(7, minDivisor(49))
@@ -105,6 +106,7 @@ class Tests {
     @Test
     @Tag("2")
     fun maxDivisor() {
+        //assertEquals(1, maxDivisor(2))
         assertEquals(1, maxDivisor(17))
         assertEquals(12, maxDivisor(24))
         assertEquals(59, maxDivisor(177))
