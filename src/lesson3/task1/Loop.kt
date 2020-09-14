@@ -73,10 +73,9 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var number = n
+    var number = abs(n)
     var countOfDigital = 0
-    if (n == 0) return 1
-    while (abs(number) > 0) {
+    while (number > 0) {
         number /= 10
         countOfDigital++
     }
@@ -170,7 +169,7 @@ fun lcm(m: Int, n: Int): Int {
     while (x1 != x2) {
         if (x1 > x2) x1 -= x2 else x2 -= x1
     }
-    return m * n / x1
+    return m / x1 * n
 }
 
 /**
@@ -212,13 +211,8 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var number = n
-    var countOfDigital = 0
+    var countOfDigital = digitNumber(number)
     var newNumber = 0.0
-    while (number > 0) {
-        number /= 10
-        countOfDigital++
-    }
-    number = n
     while (countOfDigital != 0) {
         newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
         number /= 10
