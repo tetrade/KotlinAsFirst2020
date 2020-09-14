@@ -91,7 +91,7 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var number1 = 0
     var number2 = 1
-    var buff = 0
+    var buff: Int
     for (i in 1..n) {
         buff = number1
         number1 = number2
@@ -206,15 +206,13 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var number = n
-    var countOfDigital = digitNumber(n)
-    var newNumber = 0.0
-    while (countOfDigital != 0) {
-        newNumber += 10.0.pow(countOfDigital - 1) * (number % 10)
+    var newNumber = n % 10
+    var number = n / 10
+    while (number > 0) {
+        newNumber = newNumber * 10 + number % 10
         number /= 10
-        countOfDigital--
     }
-    return newNumber.toInt()
+    return newNumber
 }
 
 /**
@@ -246,7 +244,14 @@ fun isPalindrome(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    while (num > 9) {
+        if (num % 10 != num / 10 % 10) return true
+        num /= 10
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -257,8 +262,9 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
+
 fun sin(x: Double, eps: Double): Double = TODO()
-// пока что не очень понял формулировку
+
 /**
  * Средняя (4 балла)
  *
@@ -269,7 +275,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
-// пока что не очень понял формулировку
+
 /**
  * Сложная (4 балла)
  *
@@ -282,7 +288,7 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun squareSequenceDigit(n: Int): Int {
     var generalCount = 0
     var squ = 0
-    var countOfDigital = 0
+    var countOfDigital: Int
     var lastNumber = 0
     while (n > generalCount) {
         squ++
@@ -308,7 +314,7 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var generalCount = 0
     var squ = 0
-    var countOfDigital = 0
+    var countOfDigital: Int
     var lastNumber = 0
     while (n > generalCount) {
         squ++

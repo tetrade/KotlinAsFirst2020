@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import java.nio.charset.Charset
 import kotlin.math.*
 
 // Урок 4: списки
@@ -139,7 +138,7 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    var aV = list.sum() / list.size.toDouble()
+    val aV = mean(list)
     for (i in 0 until list.size) {
         list[i] -= (aV)
     }
@@ -324,7 +323,22 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romanDigits = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arabDigits = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    var num = n
+    var arabNum = ""
+    while (num > 0) {
+        for (i in 12 downTo 0) {
+            if (num - arabDigits[i] >= 0) {
+                num -= arabDigits[i]
+                arabNum += romanDigits[i]
+                break
+            }
+        }
+    }
+    return arabNum
+}
 
 /**
  * Очень сложная (7 баллов)
