@@ -153,11 +153,9 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var s = 0
-    for (i in b.indices) s += a[i] * b[i]
-    return s
-}
+fun times(a: List<Int>, b: List<Int>): Int =
+    a.foldIndexed(0) { index, acc, i -> acc + i * b[index] }
+
 
 /**
  * Средняя (3 балла)
@@ -168,13 +166,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 
-fun polynom(p: List<Int>, x: Int): Int {
-    var s = 0
-    for (i in p.indices) {
-        s += (p[i] * x.toDouble().pow(i)).toInt()
-    }
-    return s
-}
+fun polynom(p: List<Int>, x: Int): Int =
+    p.foldIndexed(0) { deg, sum, i -> sum + i * x.toDouble().pow(deg).toInt() }
+
 
 /**
  * Средняя (3 балла)
@@ -206,7 +200,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun isPrime(n: Int) = n >= 2 && (2..n / 2).all { n % it != 0 }
 
 fun factorize(n: Int): List<Int> {
-    var pr = mutableListOf<Int>()
+    val pr = mutableListOf<Int>()
     var num = n
     if (isPrime(n)) return listOf(n)
     while (num != 1) {
@@ -229,7 +223,7 @@ fun factorize(n: Int): List<Int> {
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
 fun factorizeToString(n: Int): String {
-    var pr = mutableListOf<Int>()
+    val pr = mutableListOf<Int>()
     var num = n
     if (isPrime(n)) return "$n"
     while (num != 1) {
@@ -254,7 +248,7 @@ fun factorizeToString(n: Int): String {
  */
 fun convert(n: Int, base: Int): List<Int> {
     var num = n
-    var newNumber = mutableListOf<Int>()
+    val newNumber = mutableListOf<Int>()
     while (num > 0) {
         newNumber.add(num % base)
         num /= base
@@ -276,7 +270,7 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     var num = n
-    var newNumber = mutableListOf<String>()
+    val newNumber = mutableListOf<String>()
     while (num > 0) {
         newNumber.add(if (num % base <= 9) "${num % base}" else "${(96 + (num % base - 9)).toChar()}")
         num /= base
@@ -313,7 +307,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var mas = mutableListOf<Int>()
+    val mas = mutableListOf<Int>()
     var newNumber = 0.0
     for (i in str.indices) {
         mas.add(if (str[i].toInt() in 48..57) str[i].toInt() - 48 else str[i].toInt() - 87)
