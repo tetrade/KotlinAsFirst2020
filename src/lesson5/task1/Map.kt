@@ -145,7 +145,11 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val s = mutableSetOf<String>()
+    a.filterTo(s) { it in b }
+    return s.toList()
+}
 
 /**
  * Средняя (3 балла)
@@ -164,7 +168,13 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    var res = mapA.toMutableMap()
+    for ((key, value) in mapB.filterValues { it !in res.values }) {
+        if (res[key] == null) res[key] = value else res[key] += ", $value"
+    }
+    return res
+}
 
 /**
  * Средняя (4 балла)
@@ -176,7 +186,22 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val avePrice = mutableMapOf<String, Double>()
+    val countOfStock = mutableMapOf<String, Double>()
+    for ((stock, price) in stockPrices) {
+        if (stock !in avePrice) {
+            avePrice[stock] = price
+            countOfStock[stock] = 1.0
+        } else {
+            countOfStock[stock]?.plus(1.0)
+        }
+    }
+    for ((stock, price) in stockPrices) {
+        avePrice[stock]?.div(countOfStock[stock]!!)
+    }
+    return avePrice
+}
 
 /**
  * Средняя (4 балла)
