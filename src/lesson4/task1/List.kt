@@ -128,7 +128,9 @@ fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
+fun mean(list: List<Double>): Double =
+    if (list.isEmpty()) 0.0 else list.sum() / list.size
+
 
 /**
  * Средняя (3 балла)
@@ -139,7 +141,7 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    var aV = list.sum() / list.size.toDouble()
+    val aV = list.sum() / list.size.toDouble()
     for (i in 0 until list.size) {
         list[i] -= (aV)
     }
@@ -153,11 +155,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var s = 0
-    for (i in b.indices) s += a[i] * b[i]
-    return s
-}
+fun times(a: List<Int>, b: List<Int>): Int =
+    a.foldIndexed(0) { bIndex, total, nextElement -> total + nextElement * b[bIndex] }
 
 /**
  * Средняя (3 балла)
@@ -206,7 +205,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun isPrime(n: Int) = n >= 2 && (2..n / 2).all { n % it != 0 }
 
 fun factorize(n: Int): List<Int> {
-    var pr = mutableListOf<Int>()
+    val pr = mutableListOf<Int>()
     var num = n
     if (isPrime(n)) return listOf(n)
     while (num != 1) {
@@ -229,7 +228,7 @@ fun factorize(n: Int): List<Int> {
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
 fun factorizeToString(n: Int): String {
-    var pr = mutableListOf<Int>()
+    val pr = mutableListOf<Int>()
     var num = n
     if (isPrime(n)) return "$n"
     while (num != 1) {

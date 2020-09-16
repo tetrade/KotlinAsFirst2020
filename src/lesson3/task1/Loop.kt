@@ -246,7 +246,14 @@ fun isPalindrome(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    while (num > 9) {
+        if (num % 10 != num / 10 % 10) return true
+        num /= 10
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -319,3 +326,5 @@ fun fibSequenceDigit(n: Int): Int {
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
 }
+
+
