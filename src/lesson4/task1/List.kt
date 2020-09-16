@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import java.nio.charset.Charset
 import kotlin.math.*
 
 // Урок 4: списки
@@ -128,9 +127,7 @@ fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double =
-    if (list.isEmpty()) 0.0 else list.sum() / list.size
-
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() / list.size
 
 /**
  * Средняя (3 балла)
@@ -141,7 +138,7 @@ fun mean(list: List<Double>): Double =
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val aV = list.sum() / list.size.toDouble()
+    val aV = mean(list)
     for (i in 0 until list.size) {
         list[i] -= (aV)
     }
@@ -156,7 +153,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int =
-    a.foldIndexed(0) { bIndex, total, nextElement -> total + nextElement * b[bIndex] }
+    a.foldIndexed(0) { index, acc, i -> acc + i * b[index] }
+
 
 /**
  * Средняя (3 балла)
@@ -167,13 +165,9 @@ fun times(a: List<Int>, b: List<Int>): Int =
  * Значение пустого многочлена равно 0 при любом x.
  */
 
-fun polynom(p: List<Int>, x: Int): Int {
-    var s = 0
-    for (i in p.indices) {
-        s += (p[i] * x.toDouble().pow(i)).toInt()
-    }
-    return s
-}
+fun polynom(p: List<Int>, x: Int): Int =
+    p.foldIndexed(0) { deg, sum, i -> sum + i * x.toDouble().pow(deg).toInt() }
+
 
 /**
  * Средняя (3 балла)
@@ -253,7 +247,7 @@ fun factorizeToString(n: Int): String {
  */
 fun convert(n: Int, base: Int): List<Int> {
     var num = n
-    var newNumber = mutableListOf<Int>()
+    val newNumber = mutableListOf<Int>()
     while (num > 0) {
         newNumber.add(num % base)
         num /= base
@@ -275,7 +269,7 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     var num = n
-    var newNumber = mutableListOf<String>()
+    val newNumber = mutableListOf<String>()
     while (num > 0) {
         newNumber.add(if (num % base <= 9) "${num % base}" else "${(96 + (num % base - 9)).toChar()}")
         num /= base
@@ -312,7 +306,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var mas = mutableListOf<Int>()
+    val mas = mutableListOf<Int>()
     var newNumber = 0.0
     for (i in str.indices) {
         mas.add(if (str[i].toInt() in 48..57) str[i].toInt() - 48 else str[i].toInt() - 87)
@@ -329,7 +323,22 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romanDigits = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arabDigits = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    var num = n
+    var arabNum = ""
+    while (num > 0) {
+        for (i in 12 downTo 0) {
+            if (num - arabDigits[i] >= 0) {
+                num -= arabDigits[i]
+                arabNum += romanDigits[i]
+                break
+            }
+        }
+    }
+    return arabNum
+}
 
 /**
  * Очень сложная (7 баллов)
