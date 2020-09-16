@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.min
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -190,15 +192,11 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val avePrice = mutableMapOf<String, Double>()
     val countOfStock = mutableMapOf<String, Double>()
     for ((stock, price) in stockPrices) {
-        if (stock !in avePrice) {
-            avePrice[stock] = price
-            countOfStock[stock] = 1.0
-        } else {
-            countOfStock[stock]?.plus(1.0)
-        }
+        avePrice[stock] = avePrice[stock]?.plus(price) ?: price
+        countOfStock[stock] = countOfStock[stock]?.plus(1.0) ?: 1.0
     }
-    for ((stock, price) in stockPrices) {
-        avePrice[stock]?.div(countOfStock[stock]!!)
+    for ((stock, price) in countOfStock) {
+        avePrice[stock] = avePrice[stock]!!.div(countOfStock[stock]!!)
     }
     return avePrice
 }
@@ -218,7 +216,13 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var minCostStuff: Pair<String?, Double> = Pair(null, Double.MAX_VALUE)
+    for ((name, kindAndCost) in stuff.filterValues { (kin, _) -> kin == kind }) {
+        if (kindAndCost.second <= minCostStuff.second) minCostStuff = name to kindAndCost.second
+    }
+    return minCostStuff.first
+}
 
 /**
  * Средняя (3 балла)
@@ -229,7 +233,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toSet() == chars.toSet()
 
 /**
  * Средняя (4 балла)
@@ -243,7 +247,13 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    var rep = mutableMapOf<String, Int>()
+    for (i in list) {
+        rep[i] = rep[i]?.plus(1) ?: 1
+    }
+    return rep.filter { (key, value) -> value != 1 }
+}
 
 /**
  * Средняя (3 балла)
@@ -257,7 +267,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    TODO()
+}
 
 /**
  * Сложная (5 баллов)
@@ -312,7 +324,12 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var res: Pair<Int, Int> = -1 to -1
+    var numbers = list.filter { it <= number }.sorted()
+    TODO()
+
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -336,3 +353,8 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+
+
+
+
+
