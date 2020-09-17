@@ -189,6 +189,13 @@ class Tests {
                 mapOf("Emergency" to "911", "Police" to "02")
             )
         )
+        assertEquals(
+            mapOf("Emergency" to "112", "Police" to "112"),
+            mergePhoneBooks(
+                mapOf("Emergency" to "112"),
+                mapOf("Police" to "112")
+            )
+        )
     }
 
     @Test
@@ -236,6 +243,8 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('a'), ""))
+
     }
 
     @Test
@@ -328,6 +337,18 @@ class Tests {
         assertEquals(
             Pair(0, 1),
             findSumOfTwo(listOf(1, 3), 4)
+        )
+        assertEquals(
+            Pair(-1, -1),
+            findSumOfTwo(listOf(1), 0)
+        )
+        assertEquals(
+            Pair(0, 1),
+            findSumOfTwo(listOf(1, 2), 3)
+        )
+        assertEquals(
+            Pair(-1, -1),
+            findSumOfTwo(listOf(1, 2), 10)
         )
     }
 

@@ -173,7 +173,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mapA.toMutableMap()
-    for ((key, value) in mapB.filterValues { it !in res.values }) {
+    for ((key, value) in mapB.filter { (key, value) -> mapA[key] != mapB[key] }) {
         if (res[key] == null) res[key] = value else res[key] += ", $value"
     }
     return res
@@ -234,7 +234,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toSet() == chars.toSet()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toSet() == chars.toSet() || word.isEmpty()
 
 /**
  * Средняя (4 балла)
@@ -326,7 +326,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    if (list.isEmpty()) return -1 to -1
+    if (list.size < 2) return -1 to -1
     val numbers = list.filter { it <= number }.sorted()
     var start = 0
     var end = numbers.size - 1
