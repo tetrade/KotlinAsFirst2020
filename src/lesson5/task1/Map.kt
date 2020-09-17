@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import kotlin.math.min
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -105,6 +104,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     }
     return revGrades
 }
+
 /**
  * Простая (2 балла)
  *
@@ -116,7 +116,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean =
-    a.all { (key, value) -> key in b && a[key] == b[key] }
+    a.all { (key, _) -> key in b && a[key] == b[key] }
 
 
 /**
@@ -135,11 +135,12 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean =
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     val remList = mutableListOf<String>()
-    for ((key, value) in a) {
+    for ((key, _) in a) {
         if (key in b && a[key] == b[key]) remList.add(key)
     }
     for (key in remList) a.remove(key)
 }
+
 /**
  * Простая (2 балла)
  *
@@ -171,7 +172,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    var res = mapA.toMutableMap()
+    val res = mapA.toMutableMap()
     for ((key, value) in mapB.filterValues { it !in res.values }) {
         if (res[key] == null) res[key] = value else res[key] += ", $value"
     }
@@ -195,7 +196,7 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         avePrice[stock] = avePrice[stock]?.plus(price) ?: price
         countOfStock[stock] = countOfStock[stock]?.plus(1.0) ?: 1.0
     }
-    for ((stock, price) in countOfStock) {
+    for ((stock, _) in countOfStock) {
         avePrice[stock] = avePrice[stock]!!.div(countOfStock[stock]!!)
     }
     return avePrice
@@ -248,11 +249,11 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = word.toSet() == cha
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    var rep = mutableMapOf<String, Int>()
+    val rep = mutableMapOf<String, Int>()
     for (i in list) {
         rep[i] = rep[i]?.plus(1) ?: 1
     }
-    return rep.filter { (key, value) -> value != 1 }
+    return rep.filter { (_, value) -> value != 1 }
 }
 
 /**
@@ -325,11 +326,22 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var res: Pair<Int, Int> = -1 to -1
-    var numbers = list.filter { it <= number }.sorted()
-    TODO()
+    if (list.isEmpty()) return -1 to -1
+    val numbers = list.filter { it <= number }.sorted()
+    var start = 0
+    var end = numbers.size - 1
+    while (start != end) {
+        when {
+            numbers[start] + numbers[end] == number ->
+                return list.indexOf(minOf(numbers[start], numbers[end])) to list.indexOf(maxOf(numbers[end], numbers[start]))
+            numbers[start] + numbers[end] > number -> end--
+            numbers[start] + numbers[end] < number -> start++
 
+        }
+    }
+    return -1 to -1
 }
+
 
 /**
  * Очень сложная (8 баллов)
