@@ -1,7 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson5.task1
-
+import kotlin.math.*
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -326,22 +326,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    if (list.size < 2) return -1 to -1
     val numbers = list.filter { it <= number }.sorted()
+    if (numbers.size < 2) return -1 to -1
     var start = 0
     var end = numbers.size - 1
     while (start != end) {
         when {
             numbers[start] + numbers[end] == number ->
-                return list.indexOf(minOf(numbers[start], numbers[end])) to list.indexOf(maxOf(numbers[end], numbers[start]))
-            numbers[start] + numbers[end] > number -> end--
+                return list.indexOf(min(numbers[start], numbers[end])) to list.lastIndexOf(max(numbers[start], numbers[end]))
             numbers[start] + numbers[end] < number -> start++
+            numbers[start] + numbers[end] > number -> end--
 
         }
     }
     return -1 to -1
 }
-
 
 /**
  * Очень сложная (8 баллов)
