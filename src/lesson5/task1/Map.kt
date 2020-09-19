@@ -173,7 +173,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mapA.toMutableMap()
-    for ((key, value) in mapB.filter { (key, value) -> mapA[key] != mapB[key] }) {
+    for ((key, value) in mapB.filter { (key, _) -> mapA[key] != mapB[key] }) {
         if (res[key] == null) res[key] = value else res[key] += ", $value"
     }
     return res
@@ -256,6 +256,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     return rep.filter { (_, value) -> value != 1 }
 }
 
+
 /**
  * Средняя (3 балла)
  *
@@ -268,9 +269,11 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
+
 fun hasAnagrams(words: List<String>): Boolean {
     TODO()
 }
+
 
 /**
  * Сложная (5 баллов)
