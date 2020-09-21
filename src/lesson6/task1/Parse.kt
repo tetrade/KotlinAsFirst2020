@@ -2,9 +2,6 @@
 
 package lesson6.task1
 
-import kotlin.text.split as split
-import lesson2.task2.daysInMonth
-
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -77,36 +74,7 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun month(month: String): Int =
-    when (month) {
-        "января" -> 1
-        "февраля" -> 2
-        "марта" -> 3
-        "апреля" -> 4
-        "майя" -> 5
-        "июня" -> 6
-        "июля" -> 7
-        "августа" -> 8
-        "сентября" -> 9
-        "октября" -> 10
-        "ноября" -> 11
-        "декабря" -> 12
-        else -> -1
-    }
-
-
-fun dateStrToDigit(str: String): String {
-    var daymonthyear = str.split(" ").map { try { it.toInt() } catch (e: NumberFormatException) {month(it) } }.filter { it in 0..31 }
-    return try {
-        if (daysInMonth(daymonthyear[1], daymonthyear[2]) >= daymonthyear[0]) {
-            String.format("%02d.%02d.%02d", daymonthyear[0], daymonthyear[1], daymonthyear[2])
-        } else {
-            ""
-        }
-    } catch (e: IndexOutOfBoundsException) {
-        ""
-    }
-}
+fun dateStrToDigit(str: String): String = TODO()
 
 /**
  * Средняя (4 балла)
@@ -119,6 +87,7 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String = TODO()
+
 /**
  * Средняя (4 балла)
  *
@@ -134,8 +103,8 @@ fun dateDigitToStr(digital: String): String = TODO()
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
 fun flattenPhoneNumber(phone: String): String {
-    var newPhone = Regex("[ ([1234 -])-]").replace(phone, "")
-    return if (newPhone.contains(Regex("[^+]"))) newPhone else ""
+    val newNumber = Regex("""[- ]""").replace(phone, "")
+    return if (newNumber.matches(Regex("""^\+?\d*\(?\d+\)?\d+"""))) newNumber.replace(Regex("""[()]"""), "") else ""
 }
 
 /**
@@ -148,7 +117,15 @@ fun flattenPhoneNumber(phone: String): String {
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var l = Regex("""[%-]+""").replace(jumps, "")
+    try {
+        var g = l.split(Regex("""(\s+)+""")).map { it.toInt() }
+        return g.max()!!
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -172,7 +149,15 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    var result = 0
+    if (expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) {
+       var formatExpression = expression.split(" ")
+        for (i in formatExpression) {
+            TODO()
+        }
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -248,4 +233,3 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
-
