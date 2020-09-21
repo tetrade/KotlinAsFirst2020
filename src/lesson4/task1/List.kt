@@ -180,11 +180,12 @@ fun polynom(p: List<Int>, x: Int): Int =
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    var s = 0
     if (list.size == 0) return list
-    for (i in list.size - 1 downTo 1) {
-        list[i] = list.sum() - s
-        s += list[i]
+    var s = list[0]
+    if (list.size == 0) return list
+    for (i in 1 until list.size) {
+        list[i] += s
+        s += list[i] - list[i - 1]
     }
     return list
 }
@@ -202,16 +203,13 @@ fun factorize(n: Int): List<Int> {
     val pr = mutableListOf<Int>()
     var num = n
     if (isPrime(n)) return listOf(n)
-    while (num != 1) {
-        for (i in 2..num) {
-            if (num % i == 0 && isPrime(i)) {
-                pr.add(i)
-                num /= i
-                break
-            }
+    for (i in 2..num) {
+        while (num % i == 0) {
+            pr.add(i)
+            num /= i
         }
     }
-    return pr.sorted()
+    return pr
 }
 
 /**
@@ -221,21 +219,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val pr = mutableListOf<Int>()
-    var num = n
-    if (isPrime(n)) return "$n"
-    while (num != 1) {
-        for (i in 2..num) {
-            if (num % i == 0 && isPrime(i)) {
-                pr.add(i)
-                num /= i
-                break
-            }
-        }
-    }
-    return pr.sorted().joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).sorted().joinToString(separator = "*")
 
 
 /**
