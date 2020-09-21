@@ -152,10 +152,10 @@ fun bestHighJump(jumps: String): Int = TODO()
 fun plusMinus(expression: String): Int {
     var result = 0
     if (expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) {
-       var formatExpression = expression.split(" ")
-        for (i in formatExpression) {
-            TODO()
-        }
+        var formatExpression = Regex("""-\s""").replace(expression, "-")
+        return Regex("""\s\+\s""").replace(formatExpression, " ").split(" ").fold(0) { prev, new -> new.toInt() + prev }
+    } else {
+        throw IllegalArgumentException("Description")
     }
 }
 
