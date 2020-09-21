@@ -102,7 +102,10 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val newNumber = Regex("""[- ]""").replace(phone, "")
+    return if (newNumber.matches(Regex("""^\+?\d*\(?\d+\)?\d+"""))) newNumber.replace(Regex("""[()]"""), "") else ""
+}
 
 /**
  * Средняя (5 баллов)
@@ -114,7 +117,15 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var l = Regex("""[%-]+""").replace(jumps, "")
+    try {
+        var g = l.split(Regex("""(\s+)+""")).map { it.toInt() }
+        return g.max()!!
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -127,7 +138,9 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int = {
+
+}
 
 /**
  * Сложная (6 баллов)
@@ -138,7 +151,15 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    var result = 0
+    if (expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) {
+       var formatExpression = expression.split(" ")
+        for (i in formatExpression) {
+            TODO()
+        }
+    }
+}
 
 /**
  * Сложная (6 баллов)

@@ -327,10 +327,26 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var res: Pair<Int, Int> = -1 to -1
     var numbers = list.filter { it <= number }.sorted()
-    TODO()
-
+    var i = 0
+    while (true) {
+        for (j in numbers.size - 1 downTo i) {
+            if (numbers[i] + numbers[j] <= number) {
+                break
+            } else if (numbers[i] + numbers[j] >= number) {
+                TODO()
+            }
+        }
+    }
 }
-
+fun main() {
+    var j = 0
+    var i = 10
+    for (count in j..i){
+        print("$j ")
+        print(i)
+        if (count == 5) i = 7
+    }
+}
 /**
  * Очень сложная (8 баллов)
  *
