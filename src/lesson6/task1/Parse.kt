@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import java.lang.IndexOutOfBoundsException
+import java.util.ArrayDeque
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -234,7 +237,7 @@ fun fromRoman(roman: String): Int = TODO()
  * Вернуть список размера cells, содержащий элементы ячеек устройства после завершения выполнения последовательности.
  * Например, для 10 ячеек и командной строки +>+>+>+>+ результат должен быть 0,0,0,0,0,1,1,1,1,1
  *
- * Все прочие символы следует считать ошибочными и формировать исключение IllegalArgumentException.
+ * Все прочие символы следует считать ошибочными и формировать исключение  .
  * То же исключение формируется, если у символов [ ] не оказывается пары.
  * Выход за границу конвейера также следует считать ошибкой и формировать исключение IllegalStateException.
  * Считать, что ошибочные символы и непарные скобки являются более приоритетной ошибкой чем выход за границу ленты,
@@ -243,4 +246,75 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun checkForException(str: String): Boolean {
+    val stack = ArrayDeque<String>()
+    for (i in str.split("")) {
+        when (i) {
+            "[" -> stack.push("[")
+
+            "]" -> {
+                if (stack.peek() == "[") stack.pop() else stack.push("]")
+            }
+        }
+    }
+    return stack.isEmpty() && str.matches(Regex("""([+-<> \[\]])+"""))
+}
+
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (!checkForException(commands)) throw IllegalArgumentException("Description")
+    var digitOfCurrentCell = cells / 2
+    val curCell = Array(cells) { _ -> 0 }
+    var curLimit = limit
+    val listOfBracket = mutableMapOf<String, MutableList<Int>>(
+        "[" to mutableListOf(),
+        "]" to mutableListOf()
+    )
+    val listOfCommands = commands.split("")
+    var digitOfCurrentCommand = 0
+    val stack = ArrayDeque<String>()
+    while (digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
+        when {
+            listOfCommands[digitOfCurrentCommand] == "+" -> {
+                curCell[digitOfCurrentCell] += 1
+            }
+            listOfCommands[digitOfCurrentCommand] == "-" -> {
+                curCell[digitOfCurrentCell] -= 1
+            }
+            listOfCommands[digitOfCurrentCommand] == ">" -> {
+                try {
+                    digitOfCurrentCell++
+                    curCell[digitOfCurrentCell]
+                } catch (e: IndexOutOfBoundsException) {
+                    throw IllegalStateException("Description")
+                }
+            }
+            listOfCommands[digitOfCurrentCommand] == "<" -> {
+                try {
+                    digitOfCurrentCell--
+                    curCell[digitOfCurrentCell]
+                } catch (e: IndexOutOfBoundsException) {
+                    throw IllegalStateException("Description")
+                }
+            }
+            listOfCommands[digitOfCurrentCommand] == "[" -> {
+                if (curCell[digitOfCurrentCell] == 0) {
+                    stack.push("[")
+                    digitOfCurrentCommand++
+                    while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
+                        if (listOfCommands[digitOfCurrentCommand] == "[") stack.push("[")
+                        if (listOfCommands[digitOfCurrentCommand] == "]") stack.pop()
+                        digitOfCurrentCommand++
+                    }
+                } else listOfBracket["["]!!.add(digitOfCurrentCommand)
+            }
+            listOfCommands[digitOfCurrentCommand] == "]" -> {
+                if (curCell[digitOfCurrentCell] != 0) digitOfCurrentCommand = listOfBracket["["]!!.max()!! - 1
+                listOfBracket["["]!!.removeLast()
+            }
+        }
+        if (listOfCommands[digitOfCurrentCommand] == "") curLimit++ // требуется потому что при str.split("") в списке появляется символ ""
+        digitOfCurrentCommand++
+        curLimit--
+    }
+    return curCell.toList()
+}
