@@ -321,5 +321,3 @@ fun fibSequenceDigit(n: Int): Int {
     for (i in generalCount downTo n + 1) lastNumber /= 10
     return lastNumber % 10
 }
-
-
