@@ -257,7 +257,7 @@ fun checkForException(str: String): Boolean {
             }
         }
     }
-    return stack.isEmpty() && str.matches(Regex("""([+-<> \[\]])+"""))
+    return stack.isEmpty() && str.matches(Regex("""([+-<> \[\]])*"""))
 }
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
