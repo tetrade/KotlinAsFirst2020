@@ -42,7 +42,9 @@ fun daysInMonth(month: Int, year: Int): Int =
     when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         4, 6, 9, 11 -> 30
-        else -> if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) 29 else 28
+        2 -> if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) 29 else 28
+        else -> -1
+
     }
 
 /**
@@ -73,4 +75,8 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val minimal = minOf(a, b, c)
     val average = a + b + c - minOf(a, b, c) - maxOf(a, b, c)
     return minimal <= min(r, s) && average <= max(r, s)
+}
+
+fun main() {
+    print("adf".toInt())
 }

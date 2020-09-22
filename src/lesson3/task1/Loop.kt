@@ -164,7 +164,7 @@ fun lcm(m: Int, n: Int): Int {
     while (x1 != x2) {
         if (x1 > x2) x1 -= x2 else x2 -= x1
     }
-    return m / x1 * n
+    return m * n/ x1
 }
 
 /**
