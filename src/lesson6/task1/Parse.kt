@@ -303,7 +303,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
                         if (listOfCommands[digitOfCurrentCommand] == "[") stack.push("[")
                         if (listOfCommands[digitOfCurrentCommand] == "]") stack.pop()
-                        digitOfCurrentCommand++
+                        if (digitOfCurrentCommand != listOfCommands.size - 2) digitOfCurrentCommand++
                     }
                 } else listOfBracket["["]!!.add(digitOfCurrentCommand)
             }
@@ -312,7 +312,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 listOfBracket["["]!!.removeLast()
             }
         }
-        if (listOfCommands[digitOfCurrentCommand] == "") curLimit++ // требуется потому что при str.split("") в списке появляется символ ""
+
+        if (listOfCommands[digitOfCurrentCommand] == "") curLimit++// требуется потому что при str.split("") в списке появляется символ ""
         digitOfCurrentCommand++
         curLimit--
     }
