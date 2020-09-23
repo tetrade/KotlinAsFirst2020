@@ -299,11 +299,10 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             listOfCommands[digitOfCurrentCommand] == "[" -> {
                 if (curCell[digitOfCurrentCell] == 0) {
                     stack.push("[")
-                    digitOfCurrentCommand++
                     while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
+                        if (digitOfCurrentCommand != listOfCommands.size - 2) digitOfCurrentCommand++
                         if (listOfCommands[digitOfCurrentCommand] == "[") stack.push("[")
                         if (listOfCommands[digitOfCurrentCommand] == "]") stack.pop()
-                        if (digitOfCurrentCommand != listOfCommands.size - 2) digitOfCurrentCommand++
                     }
                 } else listOfBracket["["]!!.add(digitOfCurrentCommand)
             }
