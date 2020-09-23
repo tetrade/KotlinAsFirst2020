@@ -307,7 +307,10 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 } else listOfBracket["["]!!.add(digitOfCurrentCommand)
             }
             listOfCommands[digitOfCurrentCommand] == "]" -> {
-                if (curCell[digitOfCurrentCell] != 0) digitOfCurrentCommand = listOfBracket["["]!!.max()!! - 1
+                if (curCell[digitOfCurrentCell] != 0) {
+                    digitOfCurrentCommand = listOfBracket["["]!!.max()!! - 1
+                    curLimit++
+                }
                 listOfBracket["["]!!.removeLast()
             }
         }
