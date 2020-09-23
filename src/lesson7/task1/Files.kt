@@ -1,7 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson7.task1
-
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -63,7 +62,14 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter().use {
+        for (i in File(inputName).readLines()) {
+            if (!i.startsWith("_")) {
+                it.write(i)
+                it.newLine()
+            }
+        }
+    }
 }
 
 /**
@@ -75,7 +81,13 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val count = mutableMapOf<String, Int>()
+    for (i in substrings) count[i] = 0
+    for (i in File(inputName).readLines().map { it.toLowerCase() }.toList()) {
+        
+    }
+}
 
 
 /**

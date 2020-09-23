@@ -173,6 +173,3 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
         b < c || a > d -> -1
         else -> max(0, min(b, d) - max(a, c))
     }
-
-
-
