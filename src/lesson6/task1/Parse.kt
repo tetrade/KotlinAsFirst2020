@@ -258,7 +258,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var digitOfCurrentCell = cells / 2
     val curCell = Array(cells) { 0 }
     var curLimit = limit
-    val listOfBracket = mapOf<String, ArrayDeque<Int>>(
+    val listOfBracket = mapOf(
         "[" to ArrayDeque<Int>(),
         "]" to ArrayDeque<Int>()
     )
