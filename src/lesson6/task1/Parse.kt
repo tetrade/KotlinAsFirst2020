@@ -107,7 +107,9 @@ fun dateDigitToStr(digital: String): String = TODO()
  */
 fun flattenPhoneNumber(phone: String): String {
     val newNumber = Regex("""[- ]""").replace(phone, "")
-    return if (newNumber.matches(Regex("""^\+?\d*\(?\d+\)?\d*"""))) newNumber.replace(Regex("""[()]"""), "") else ""
+    return if (newNumber.matches(Regex("""^\+?\d*\(?\d+\)?\d*"""))) {
+        newNumber.replace(Regex("""[()]"""), "")
+    } else ""
 }
 
 /**
@@ -122,12 +124,8 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     val l = Regex("""[%-]+""").replace(jumps, "")
-    return try {
-        val g = l.split(Regex("""(\s+)+""")).map { it.toInt() }
-        g.max()!!
-    } catch (e: NumberFormatException) {
-        -1
-    }
+    val g = l.split(Regex("""(\s+)+""")).map { it.toIntOrNull() ?: return -1 }
+    return g.max()!!
 }
 
 /**
@@ -153,11 +151,11 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) {
-        val formatExpression = Regex("""-\s""").replace(expression, "-")
-        return Regex("""\s\+\s""").replace(formatExpression, " ").split(" ").fold(0) { prev, new -> new.toInt() + prev }
-    } else {
-        throw IllegalArgumentException("Description")
+    if (!expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) throw IllegalArgumentException()
+    var formatExpression = Regex("""-\s""").replace(expression, "-")
+    formatExpression = Regex("""\s\+\s""").replace(formatExpression, " ") //cделал чтобы все уместить за ограничитель
+    return formatExpression.split(" ").fold(0) { prev, new ->
+        new.toInt() + prev
     }
 }
 
@@ -186,7 +184,7 @@ fun firstDuplicateIndex(str: String): Int = TODO()
 fun mostExpensive(description: String): String {
     if (!description.matches(Regex("""(\s?((\S)+) (\d+)(\.\d*)?;?)+"""))) return ""
     val list = description.replace(";", "").split(" ")
-    var mostExProd: String = list[0]
+    var mostExProd = list[0]
     var mostExProdPrice = 0.0
     for (i in 1 until list.size step 2) {
         if (list[i].toDouble() > mostExProdPrice) {
@@ -251,10 +249,7 @@ fun checkForException(str: String): Boolean {
     for (i in str.split("")) {
         when (i) {
             "[" -> stack.push("[")
-
-            "]" -> {
-                if (stack.peek() == "[") stack.pop() else stack.push("]")
-            }
+            "]" -> if (stack.peek() == "[") stack.pop() else stack.push("]")
         }
     }
     return stack.isEmpty() && str.matches(Regex("""([+-<> \[\]])*"""))
@@ -265,57 +260,47 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var digitOfCurrentCell = cells / 2
     val curCell = Array(cells) { _ -> 0 }
     var curLimit = limit
-    val listOfBracket = mutableMapOf<String, MutableList<Int>>(
-        "[" to mutableListOf(),
-        "]" to mutableListOf()
+    val listOfBracket = mapOf<String, ArrayDeque<Int>>(
+        "[" to ArrayDeque<Int>(),
+        "]" to ArrayDeque<Int>()
     )
-    val listOfCommands = commands.split("")
+    val listOfCommands = commands.split("").filter { it != "" }
     var digitOfCurrentCommand = 0
     val stack = ArrayDeque<String>()
-    while (digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
-        when {
-            listOfCommands[digitOfCurrentCommand] == "+" -> {
+    while (digitOfCurrentCommand != listOfCommands.size && curLimit != 0) {
+        when (listOfCommands[digitOfCurrentCommand]) {
+            "+" -> {
                 curCell[digitOfCurrentCell] += 1
             }
-            listOfCommands[digitOfCurrentCommand] == "-" -> {
+            "-" -> {
                 curCell[digitOfCurrentCell] -= 1
             }
-            listOfCommands[digitOfCurrentCommand] == ">" -> {
-                try {
-                    digitOfCurrentCell++
-                    curCell[digitOfCurrentCell]
-                } catch (e: IndexOutOfBoundsException) {
-                    throw IllegalStateException("Description")
-                }
+            ">" -> {
+                if (digitOfCurrentCell + 1 == curCell.size) throw IllegalStateException()
+                digitOfCurrentCell++
             }
-            listOfCommands[digitOfCurrentCommand] == "<" -> {
-                try {
-                    digitOfCurrentCell--
-                    curCell[digitOfCurrentCell]
-                } catch (e: IndexOutOfBoundsException) {
-                    throw IllegalStateException("Description")
-                }
+            "<" -> {
+                if (digitOfCurrentCell - 1 == -1) throw IllegalStateException()
+                digitOfCurrentCell--
             }
-            listOfCommands[digitOfCurrentCommand] == "[" -> {
+            "[" -> {
                 if (curCell[digitOfCurrentCell] == 0) {
                     stack.push("[")
                     while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
-                        if (digitOfCurrentCommand != listOfCommands.size - 2) digitOfCurrentCommand++
+                        if (digitOfCurrentCommand != listOfCommands.size - 1) digitOfCurrentCommand++
                         if (listOfCommands[digitOfCurrentCommand] == "[") stack.push("[")
                         if (listOfCommands[digitOfCurrentCommand] == "]") stack.pop()
                     }
-                } else listOfBracket["["]!!.add(digitOfCurrentCommand)
+                } else listOfBracket["["]!!.push(digitOfCurrentCommand)
             }
-            listOfCommands[digitOfCurrentCommand] == "]" -> {
+            "]" -> {
                 if (curCell[digitOfCurrentCell] != 0) {
-                    digitOfCurrentCommand = listOfBracket["["]!!.max()!! - 1
+                    digitOfCurrentCommand = listOfBracket["["]!!.peek() - 1
                     curLimit++
                 }
-                listOfBracket["["]!!.removeLast()
+                listOfBracket["["]!!.pop()
             }
         }
-
-        if (listOfCommands[digitOfCurrentCommand] == "") curLimit++// требуется потому что при str.split("") в списке появляется символ ""
         digitOfCurrentCommand++
         curLimit--
     }
