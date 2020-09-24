@@ -284,7 +284,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             "[" -> {
                 if (curCell[digitOfCurrentCell] == 0) {
                     stack.push("[")
-                    while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.size - 1 && curLimit != 0) {
+                    while (stack.isNotEmpty() && digitOfCurrentCommand != listOfCommands.lastIndex && curLimit != 0) {
                         if (digitOfCurrentCommand != listOfCommands.lastIndex) digitOfCurrentCommand++
                         if (listOfCommands[digitOfCurrentCommand] == "[") stack.push("[")
                         if (listOfCommands[digitOfCurrentCommand] == "]") stack.pop()
