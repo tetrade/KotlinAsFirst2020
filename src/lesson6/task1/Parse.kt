@@ -154,9 +154,7 @@ fun plusMinus(expression: String): Int {
     if (!expression.matches(Regex("""^(\d+)( [+-] (\d+))*"""))) throw IllegalArgumentException()
     var formatExpression = Regex("""-\s""").replace(expression, "-")
     formatExpression = Regex("""\s\+\s""").replace(formatExpression, " ") //cделал чтобы все уместить за ограничитель
-    return formatExpression.split(" ").fold(0) { prev, new ->
-        new.toInt() + prev
-    }
+    return formatExpression.split(" ").fold(0) { prev, new -> new.toInt() + prev }
 }
 
 /**
