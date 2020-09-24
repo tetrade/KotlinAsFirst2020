@@ -256,7 +256,7 @@ fun checkForException(str: String): Boolean {
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!checkForException(commands)) throw IllegalArgumentException("Description")
     var digitOfCurrentCell = cells / 2
-    val curCell = Array(cells) { _ -> 0 }
+    val curCell = Array(cells) { 0 }
     var curLimit = limit
     val listOfBracket = mapOf<String, ArrayDeque<Int>>(
         "[" to ArrayDeque<Int>(),
