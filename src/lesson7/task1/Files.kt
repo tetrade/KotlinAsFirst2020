@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson7.task1
+
 import java.io.File
 
 // Урок 7: работа с файлами
@@ -81,8 +82,23 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
-
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val countOfWords = mutableMapOf<String, Int>()
+    for (i in substrings) {
+        countOfWords[i] = 0
+    }
+    val text = File(inputName).readText().toLowerCase()
+    var lengthOfSub: Int
+    for (sub in substrings) {
+        lengthOfSub = sub.length
+        for (typo in text.indices) {
+            if (typo + lengthOfSub <= text.length && text.substring(typo, typo + lengthOfSub) == sub.toLowerCase()) {
+                countOfWords[sub] = countOfWords[sub]!! + 1
+            }
+        }
+    }
+    return countOfWords
+}
 
 /**
  * Средняя (12 баллов)
@@ -100,6 +116,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     TODO()
 }
+
 
 /**
  * Средняя (15 баллов)
@@ -119,7 +136,28 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    var longestStr = 0
+    var countOfS = 0
+    for (i in File(inputName).readLines()) {
+        longestStr = maxOf(longestStr, i.trim().length)
+    }
+    var file = File(outputName).bufferedWriter().use {
+        for (i in File(inputName).readLines()) {
+            if (longestStr == i.trim().length) {
+                it.write(i.trim())
+                it.newLine()
+                continue
+            } else {
+                while (countOfS != longestStr / 2 - i.trim().length / 2) {
+                    it.write(" ")
+                    countOfS++
+                }
+            }
+            it.write(i.trim())
+            it.newLine()
+            countOfS = 0
+        }
+    }
 }
 
 /**
@@ -274,23 +312,62 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    var text = listOf<String>()
+    var commands = mutableMapOf<String, Boolean>(
+        "*" to false,
+        "**" to false,
+        "~~" to false
+    )
+    var writer = File(outputName).bufferedWriter().use {
+        for (bufftext in File(inputName).readLines()) {
+            if (bufftext.isEmpty()) {
+
+            }
+            text = bufftext.chunked(1)
+            for (sumb in text.indices) {
+                when {
+                    text[sumb] + text[sumb + 1] == "**" -> {
+                        if (commands["**"]!!) {
+                            it.write("</b>")
+                            commands["**"] = false
+                        } else {
+                            it.write("<b>")
+                            commands["**"] = true
+                        }
+                    }
+                    text[sumb] == "*" -> {
+                        if (commands["*"]!!) {
+                            it.write("</i>")
+                            commands["*"] = false
+                        } else {
+                            it.write("<i>")
+                            commands["*"] = true
+                        }
+                    }
+                    text[sumb] + text[sumb + 1] == "" -> print("  ")
+                }
+            }
+        }
+    }
 }
 
+fun main() {
+
+}
 /**
  * Сложная (23 балла)
  *
@@ -325,65 +402,65 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <p>
-      <ul>
-        <li>
-          Утка по-пекински
-          <ul>
-            <li>Утка</li>
-            <li>Соус</li>
-          </ul>
-        </li>
-        <li>
-          Салат Оливье
-          <ol>
-            <li>Мясо
-              <ul>
-                <li>Или колбаса</li>
-              </ul>
-            </li>
-            <li>Майонез</li>
-            <li>Картофель</li>
-            <li>Что-то там ещё</li>
-          </ol>
-        </li>
-        <li>Помидоры</li>
-        <li>Фрукты
-          <ol>
-            <li>Бананы</li>
-            <li>Яблоки
-              <ol>
-                <li>Красные</li>
-                <li>Зелёные</li>
-              </ol>
-            </li>
-          </ol>
-        </li>
-      </ul>
-    </p>
-  </body>
+<body>
+<p>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>Или колбаса</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>Фрукты
+<ol>
+<li>Бананы</li>
+<li>Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</p>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -410,23 +487,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -440,16 +517,16 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
