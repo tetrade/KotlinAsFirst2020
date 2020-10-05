@@ -75,6 +75,10 @@ Basic, Ruby, Swift.
     @Tag("14")
     fun countSubstrings() {
         assertEquals(
+            mapOf("ав" to 2, "аСб" to 2, "апНврабяКа" to 0),
+            countSubstrings("input/substrings_in3.txt", listOf("ав", "ав", "аСб", "апНврабяКа"))
+        )
+        assertEquals(
             mapOf("РАЗНЫЕ" to 2, "ные" to 2, "Неряшливость" to 1, "е" to 49, "эволюция" to 0),
             countSubstrings("input/substrings_in1.txt", listOf("РАЗНЫЕ", "ные", "Неряшливость", "е", "эволюция"))
         )
@@ -126,6 +130,13 @@ Basic, Ruby, Swift.
                                      Hello World
            Во входном файле с именем inputName содержится некоторый текст.
         Вывести его в выходной файл с именем outputName, выровняв по центру."""
+        )
+        centerFile("input/center_in2.txt", "temp.txt")
+        assertFileContent(
+            "temp.txt",
+            """абааахыа --- абааахыа --- АБАААХЫА
+       абааахыа - АБАААХЫА
+             АБАААХЫА""".trimMargin()
         )
         File("temp.txt").delete()
 

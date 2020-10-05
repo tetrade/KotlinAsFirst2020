@@ -89,7 +89,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     }
     val text = File(inputName).readText().toLowerCase()
     var lengthOfSub: Int
-    for (sub in substrings) {
+    for (sub in countOfWords.keys) {
         lengthOfSub = sub.length
         for (typo in text.indices) {
             if (typo + lengthOfSub <= text.length && text.substring(typo, typo + lengthOfSub) == sub.toLowerCase()) {
@@ -149,6 +149,7 @@ fun centerFile(inputName: String, outputName: String) {
                 continue
             } else {
                 while (countOfS != longestStr / 2 - i.trim().length / 2) {
+                    if (countOfS == 0 && longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS++
                     it.write(" ")
                     countOfS++
                 }
@@ -188,14 +189,7 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    var longestStr = 0
-    var countOfS = 0
-    for (i in File(inputName).readLines()) {
-        longestStr = maxOf(longestStr, i.trim().length)
-    }
-    for (i in File(inputName).readLines()) {
-
-    }
+    TODO()
 }
 
 /**
@@ -355,16 +349,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 sumb += sumbToWrite.length
             }
         }
-
-        var nInText = false
-        for (line in File(inputName).readLines()) {
-            if (line.isEmpty()) {
-                nInText = true
-                break
-            }
-        }
-        it.write("<html>\n<body>")
-        if (nInText) it.write("<p>\n")
+        it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
             sumb = 0
             text = bufftext.chunked(1).toMutableList()
@@ -385,8 +370,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
             }
         }
-        if (nInText) it.write("</p>\n")
-        it.write("</body>\n</html>")
+        it.write("</p>\n</body>\n</html>")
     }
 }
 
