@@ -335,8 +335,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    var n = mutableListOf<Int>()
-    var text = listOf<String>()
+    var text = mutableListOf<String>()
     val commandsIn = mutableListOf<String>()
     val listOfCommands = mutableMapOf<String, List<String>>(
         "*" to listOf("<i>", "</i>"),
@@ -368,7 +367,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         if (nInText) it.write("<p>\n")
         for (bufftext in File(inputName).readLines()) {
             sumb = 0
-            text = bufftext.chunked(1)
+            text = bufftext.chunked(1).toMutableList()
+            text.add(" ")
             if (bufftext.isEmpty()) {
                 it.write("</p>\n<p>")
                 continue
