@@ -349,16 +349,19 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 sumb += sumbToWrite.length
             }
         }
+
+        var prevS = false
         it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
             sumb = 0
             text = bufftext.chunked(1).toMutableList()
             text.add(" ")
-            if (bufftext.isEmpty()) {
+            if (bufftext.isEmpty() && !prevS) {
                 it.write("</p>\n<p>")
+                prevS = true
                 continue
             }
-            while (sumb != text.size - 1) {
+            while (sumb != text.size - 1 && text.isNotEmpty()) {
                 when {
                     text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
                     text[sumb] == "*" -> writeInFile("*")
@@ -369,6 +372,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                 }
             }
+            prevS = false
         }
         it.write("</p>\n</body>\n</html>")
     }
