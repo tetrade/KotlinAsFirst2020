@@ -188,7 +188,14 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var longestStr = 0
+    var countOfS = 0
+    for (i in File(inputName).readLines()) {
+        longestStr = maxOf(longestStr, i.trim().length)
+    }
+    for (i in File(inputName).readLines()) {
+
+    }
 }
 
 /**
@@ -325,49 +332,64 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
-fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    var text = listOf<String>()
-    var commands = mutableMapOf<String, Boolean>(
-        "*" to false,
-        "**" to false,
-        "~~" to false
-    )
-    var writer = File(outputName).bufferedWriter().use {
-        for (bufftext in File(inputName).readLines()) {
-            if (bufftext.isEmpty()) {
 
+
+fun markdownToHtmlSimple(inputName: String, outputName: String) {
+    var n = mutableListOf<Int>()
+    var text = listOf<String>()
+    val commandsIn = mutableListOf<String>()
+    val listOfCommands = mutableMapOf<String, List<String>>(
+        "*" to listOf("<i>", "</i>"),
+        "**" to listOf("<b>", "</b>"),
+        "~~" to listOf("<s>", "</s>")
+    )
+    var sumb = 0
+    var writer = File(outputName).bufferedWriter().use {
+        fun writeInFile(sumbToWrite: String) {
+            if (sumbToWrite in commandsIn) {
+                it.write(listOfCommands[sumbToWrite]!![1])
+                commandsIn.remove(sumbToWrite)
+                sumb += sumbToWrite.length
+            } else {
+                it.write(listOfCommands[sumbToWrite]!![0])
+                commandsIn.add(sumbToWrite)
+                sumb += sumbToWrite.length
             }
+        }
+
+        var nInText = false
+        for (line in File(inputName).readLines()) {
+            if (line.isEmpty()) {
+                nInText = true
+                break
+            }
+        }
+        it.write("<html>\n<body>")
+        if (nInText) it.write("<p>\n")
+        for (bufftext in File(inputName).readLines()) {
+            sumb = 0
             text = bufftext.chunked(1)
-            for (sumb in text.indices) {
+            if (bufftext.isEmpty()) {
+                it.write("</p>\n<p>")
+                continue
+            }
+            while (sumb != text.size - 1) {
                 when {
-                    text[sumb] + text[sumb + 1] == "**" -> {
-                        if (commands["**"]!!) {
-                            it.write("</b>")
-                            commands["**"] = false
-                        } else {
-                            it.write("<b>")
-                            commands["**"] = true
-                        }
+                    text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
+                    text[sumb] == "*" -> writeInFile("*")
+                    text[sumb] + text[sumb + 1] == "~~" && sumb + 1 <= text.size - 1 -> writeInFile("~~")
+                    else -> {
+                        it.write(text[sumb])
+                        sumb++
                     }
-                    text[sumb] == "*" -> {
-                        if (commands["*"]!!) {
-                            it.write("</i>")
-                            commands["*"] = false
-                        } else {
-                            it.write("<i>")
-                            commands["*"] = true
-                        }
-                    }
-                    text[sumb] + text[sumb + 1] == "" -> print("  ")
                 }
             }
         }
+        if (nInText) it.write("</p>\n")
+        it.write("</body>\n</html>")
     }
 }
 
-fun main() {
-
-}
 /**
  * Сложная (23 балла)
  *
