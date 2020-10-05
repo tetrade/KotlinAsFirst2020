@@ -372,7 +372,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                 }
             }
-            prevS = false
+            if (text.isEmpty()) {
+                it.write("\n")
+                prevS = false
+            }
         }
         it.write("</p>\n</body>\n</html>")
     }
