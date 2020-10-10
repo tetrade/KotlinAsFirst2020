@@ -329,15 +329,14 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    var text = mutableListOf<String>()
     val commandsIn = mutableListOf<String>()
-    val listOfCommands = mutableMapOf<String, List<String>>(
+    val listOfCommands = mapOf<String, List<String>>(
         "*" to listOf("<i>", "</i>"),
         "**" to listOf("<b>", "</b>"),
         "~~" to listOf("<s>", "</s>")
     )
     var sumb = 0
-    var writer = File(outputName).bufferedWriter().use {
+    File(outputName).bufferedWriter().use {
         fun writeInFile(sumbToWrite: String) {
             if (sumbToWrite in commandsIn) {
                 it.write(listOfCommands[sumbToWrite]!![1])
@@ -350,18 +349,18 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
         }
 
+        var text = listOf<String>()
         var prevS = false
         it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
-            sumb = 0
-            text = bufftext.chunked(1).toMutableList()
-            text.add(" ")
             if (bufftext.isEmpty() && !prevS) {
                 it.write("</p>\n<p>")
                 prevS = true
                 continue
             }
-            while (sumb != text.size - 1 && text.isNotEmpty()) {
+            sumb = 0
+            text = bufftext.plus(" ").chunked(1).toMutableList()
+            while (sumb != text.size - 1) {
                 when {
                     text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
                     text[sumb] == "*" -> writeInFile("*")
@@ -372,7 +371,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                 }
             }
-            if (text.isEmpty()) {
+            if (text.removeLast().isEmpty()) {
                 it.write("\n")
                 prevS = false
             }
