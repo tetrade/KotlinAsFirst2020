@@ -1,8 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson7.task1
-
+import lesson3.task1.digitNumber
 import java.io.File
+import kotlin.math.log
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -363,7 +365,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 prevS = false
             }
             sumb = 0
-            text = bufftext.plus(" ").chunked(1).toMutableList()
+            text = bufftext.plus(" ").chunked(1)
             while (sumb != text.size - 1) {
                 when {
                     text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
@@ -544,7 +546,43 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
+
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    if (rhv > lhv) {
+
+    }
+    var indexOfResult = 0
+    var number = lhv.toString().chunked(1).map { it.toInt() }
+    var ans = 0
+    var minuses = mutableListOf<Int>()
+    var results = mutableListOf<Int>()
+    var a = 0
+    a = if (number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt() >= rhv) {
+        number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt()
+    } else {
+        number.subList(0, digitNumber(rhv) + 1).joinToString(separator = "").toInt()
+    }
+    for (i in 9 downTo 0) {
+        if (rhv * i <= a) {
+            minuses.add(rhv * i)
+            ans = 10 * ans + i
+            break
+        }
+    }
+    var lens = digitNumber(minuses[indexOfResult])
+    results.add(a - minuses[indexOfResult])
+    while (lhv - ans * rhv > rhv) {
+        results[indexOfResult] = 10 * results[indexOfResult] + number[lens]
+        for (i in 9 downTo 0) {
+            if (rhv * i <= results[indexOfResult]) {
+                minuses.add(rhv * i)
+                ans = 10 * ans + i
+                break
+            }
+        }
+        results.add(results[indexOfResult] - minuses[indexOfResult + 1])
+        indexOfResult++
+        lens++
+    }
 }
 
