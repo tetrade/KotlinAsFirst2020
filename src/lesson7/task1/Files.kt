@@ -552,13 +552,22 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     if (rhv > lhv) {
         File(outputName).bufferedWriter().use {
-            it.write(" $lhv | $rhv\n-0")
-            for (i in 0..digitNumber(lhv) + 1) it.write(" ")
+            if (digitNumber(lhv) == 1){
+                it.write(" $lhv | $rhv\n")
+            } else {
+                it.write("$lhv | $rhv\n")
+            }
+            for (i in 0..digitNumber(lhv) - 3) it.write(" ")
+            it.write("-0")
+            for (i in 0..2) it.write(" ")
             it.write("0\n")
-            for (i in 0..digitNumber(lhv)) it.write("-")
+            for (i in 0..maxOf(digitNumber(lhv) - 1,1)) it.write("-")
             it.newLine()
-            for (i in 0 until digitNumber(lhv)) it.write(" ")
-            it.write("${lhv % rhv}")
+            if (digitNumber(lhv) == 1){
+                it.write(" ${lhv % rhv}")
+            } else {
+                it.write("$lhv | $rhv\n")
+            }
         }
         return
     } else if (rhv == 0) {
