@@ -564,7 +564,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val number = lhv.toString().chunked(1).map { it.toInt() }
     var ans = 0
     val minuses = mutableListOf<Int>()
-    val results = mutableListOf<Int>()
+    val results = mutableListOf<String>()
+    // тип String нужен только для того чтобы сохранять 0 в начале числа в некоторых случаях
     var firstDig = 0
     firstDig = if (number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt() >= rhv) {
         number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt()
@@ -582,11 +583,11 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     maxMinu(firstDig)
     var lens = digitNumber(minuses[indexOfResult])
-    results.add(firstDig - minuses[indexOfResult])
+    results.add((firstDig - minuses[indexOfResult]).toString())
     while (lhv - ans * rhv > rhv) {
-        results[indexOfResult] = 10 * results[indexOfResult] + number[lens]
-        maxMinu(results[indexOfResult])
-        results.add(results[indexOfResult] - minuses[indexOfResult + 1])
+        results[indexOfResult] = results[indexOfResult] + number[lens]
+        maxMinu(results[indexOfResult].toInt())
+        results.add((results[indexOfResult].toInt() - minuses[indexOfResult + 1]).toString())
         indexOfResult++
         lens++
     }
@@ -599,14 +600,14 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var countOfTab = 0
         for (i in results.indices) {
             it.newLine()
-            countOfTab = digitNumber(minuses[0]) + 1 - digitNumber(results[i]) + i
+            countOfTab = digitNumber(minuses[0]) + 1 - results[i].length + i
             if (i + 1 == minuses.size) countOfTab--
             for (i in 0..countOfTab) it.write(" ")
             it.write("${results[i]}\n")
             if (i + 1 == minuses.size) break
-            for (i in 0 until countOfTab + digitNumber(results[i]) - digitNumber(minuses[i + 1])) it.write(" ")
+            for (i in 0 until countOfTab + results[i].length - digitNumber(minuses[i + 1])) it.write(" ")
             it.write("-${minuses[i + 1]}\n")
-            for (i in 0 until countOfTab + digitNumber(results[i]) - digitNumber(minuses[i + 1])) it.write(" ")
+            for (i in 0 until countOfTab + results[i].length - digitNumber(minuses[i + 1])) it.write(" ")
             for (i in 0..digitNumber(minuses[i + 1])) it.write("-")
         }
     }
