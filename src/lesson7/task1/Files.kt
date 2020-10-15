@@ -354,9 +354,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
             if (bufftext.isEmpty() && !prevS) {
-                it.write("</p>\n<p>")
+                it.write("</p>")
                 prevS = true
                 continue
+            }
+            if (bufftext.isNotEmpty() && prevS) {
+                it.write("<p>")
+                prevS = false
             }
             sumb = 0
             text = bufftext.plus(" ").chunked(1).toMutableList()
@@ -371,14 +375,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                 }
             }
-            if (text.removeLast().isEmpty()) {
-                it.write("\n")
-                prevS = false
-            }
         }
         it.write("</p>\n</body>\n</html>")
     }
 }
+
 
 /**
  * Сложная (23 балла)
