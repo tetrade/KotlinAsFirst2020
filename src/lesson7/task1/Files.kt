@@ -555,7 +555,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             it.write(" $lhv | $rhv\n-0")
             for (i in 0..digitNumber(lhv) + 1) it.write(" ")
             it.write("0\n")
-            for (i in 0 until digitNumber(rhv)) it.write("-")
+            for (i in 0..digitNumber(lhv)) it.write("-")
             it.newLine()
             for (i in 0 until digitNumber(lhv)) it.write(" ")
             it.write("${lhv % rhv}")
