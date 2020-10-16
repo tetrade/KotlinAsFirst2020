@@ -142,26 +142,24 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     var longestStr = 0
-    var countOfS = 0
     for (i in File(inputName).readLines()) {
         longestStr = maxOf(longestStr, i.trim().length)
     }
-    var file = File(outputName).bufferedWriter().use {
+    File(outputName).bufferedWriter().use {
+        var countOfS = 0
         for (i in File(inputName).readLines()) {
             if (longestStr == i.trim().length) {
-                it.write(i.trim())
-                it.newLine()
-                continue
+                it.write(i.trim() + "\n")
+            } else if (longestStr % 2 != i.trim().length % 2 && longestStr - i.trim().length == 1) {
+                it.write(i.trim() + "\n")
             } else {
                 while (countOfS != longestStr / 2 - i.trim().length / 2) {
-                    if (countOfS == 0 && longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS++
-                    it.write(" ")
                     countOfS++
                 }
+                if (longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS--
+                it.write(" ".repeat(countOfS) + i.trim() + "\n")
+                countOfS = 0
             }
-            it.write(i.trim())
-            it.newLine()
-            countOfS = 0
         }
     }
 }
