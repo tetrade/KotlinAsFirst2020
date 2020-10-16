@@ -359,7 +359,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var prevS = false
         it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
-            if (bufftext.isEmpty() && !prevS && !startOfText) {
+            if (bufftext.trim().isEmpty() && !prevS && !startOfText) {
                 it.write("</p>")
                 prevS = true
                 continue
@@ -387,7 +387,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 }
 
-
+fun main() {
+    print("      ".trim().isEmpty())
+}
 /**
  * Сложная (23 балла)
  *
