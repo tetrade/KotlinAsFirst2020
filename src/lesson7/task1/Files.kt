@@ -340,42 +340,56 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "**" to listOf("<b>", "</b>"),
         "~~" to listOf("<s>", "</s>")
     )
-    var sumb = 0
+    var firstLastEmptyLines = -1
+    var numberLine = 1
+    var nextEmpty = true
+    for (line in File(inputName).readLines()) {
+        if (line.trim().isEmpty() && nextEmpty) {
+            firstLastEmptyLines = numberLine
+            nextEmpty = false
+        }
+        if (line.trim().isNotEmpty()) {
+            firstLastEmptyLines = -1
+            nextEmpty = true
+        }
+        numberLine++
+    }
     File(outputName).bufferedWriter().use {
-        fun writeInFile(sumbToWrite: String) {
+        fun writeInFile(sumbToWrite: String):Int {
             if (sumbToWrite in commandsIn) {
                 it.write(listOfCommands[sumbToWrite]!![1])
                 commandsIn.remove(sumbToWrite)
-                sumb += sumbToWrite.length
             } else {
                 it.write(listOfCommands[sumbToWrite]!![0])
                 commandsIn.add(sumbToWrite)
-                sumb += sumbToWrite.length
+
             }
+            return sumbToWrite.length
         }
 
         var startOfText = true
         var text = listOf<String>()
         var prevS = false
         it.write("<html>\n<body>\n<p>")
+        numberLine = 0
+        var sumb = 0
         for (bufftext in File(inputName).readLines()) {
+            numberLine++
             if (bufftext.trim().isEmpty() && !prevS && !startOfText) {
-                it.write("</p>")
+                if (firstLastEmptyLines == -1 || numberLine < firstLastEmptyLines) it.write("</p>\n<p>")
                 prevS = true
-                continue
             }
-            if (bufftext.isNotEmpty() && prevS && !startOfText) {
-                it.write("<p>")
-                prevS = false
-            }
+            if (bufftext.trim().isEmpty()) continue
+            prevS = false
             sumb = 0
             text = bufftext.plus(" ").chunked(1)
             while (sumb != text.size - 1) {
                 if (startOfText) startOfText = !startOfText
                 when {
-                    text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
-                    text[sumb] == "*" -> writeInFile("*")
-                    text[sumb] + text[sumb + 1] == "~~" && sumb + 1 <= text.size - 1 -> writeInFile("~~")
+                    text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> sumb += writeInFile("**")
+
+                    text[sumb] == "*" -> sumb += writeInFile("*")
+                    text[sumb] + text[sumb + 1] == "~~" && sumb + 1 <= text.size - 1 -> sumb += writeInFile("~~")
                     else -> {
                         it.write(text[sumb])
                         sumb++
@@ -387,9 +401,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 }
 
-fun main() {
-    print("      ".trim().isEmpty())
-}
 /**
  * Сложная (23 балла)
  *
