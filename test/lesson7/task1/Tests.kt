@@ -450,7 +450,6 @@ Basic, Ruby, Swift.
                   0
              """
         )
-
         File("temp.txt").delete()
     }
 }

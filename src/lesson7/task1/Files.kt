@@ -549,101 +549,79 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
-fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    if (rhv > lhv) {
-        File(outputName).bufferedWriter().use {
-            if (digitNumber(lhv) == 1){
-                it.write(" $lhv | $rhv\n")
-            } else {
-                it.write("$lhv | $rhv\n")
-            }
-            for (i in 0..digitNumber(lhv) - 3) it.write(" ")
-            it.write("-0")
-            for (i in 0..2) it.write(" ")
-            it.write("0\n")
-            for (i in 0..maxOf(digitNumber(lhv) - 1,1)) it.write("-")
-            it.newLine()
-            if (digitNumber(lhv) == 1){
-                it.write(" ${lhv % rhv}")
-            } else {
-                it.write("${lhv % rhv}")
-            }
-        }
-        return
-    } else if (rhv == 0) {
-        File(outputName).bufferedWriter().use {
-            it.write(" $lhv | $rhv\n-0")
-            for (i in 0..digitNumber(lhv) + 1) it.write(" ")
-            it.write("0\n")
-            for (i in 0..digitNumber(lhv)) it.write("-")
-            it.newLine()
-            for (i in 0 until digitNumber(lhv)) it.write(" ")
-            it.write("0")
-        }
-        return
-    } else {
-        var indexOfResult = 0
-        val number = lhv.toString().chunked(1).map { it.toInt() }
-        var ans = 0
-        val minuses = mutableListOf<Int>()
-        val results = mutableListOf<String>()
-        // тип String нужен только для того чтобы сохранять 0 в начале чисел в некоторых случаях
-        var firstDig = 0
-        firstDig = if (number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt() >= rhv) {
-            number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt()
-        } else {
-            number.subList(0, digitNumber(rhv) + 1).joinToString(separator = "").toInt()
-        }
-        fun maxMinu(num: Int) {
-            for (i in 9 downTo 0) {
-                if (rhv * i <= num) {
-                    minuses.add(rhv * i)
-                    ans = 10 * ans + i
-                    break
-                }
-            }
-        }
-        maxMinu(firstDig)
-        var lens = digitNumber(minuses[indexOfResult])
-        results.add((firstDig - minuses[indexOfResult]).toString())
-        while (lhv - ans * rhv > rhv) {
-            results[indexOfResult] = results[indexOfResult] + number[lens]
-            maxMinu(results[indexOfResult].toInt())
-            results.add((results[indexOfResult].toInt() - minuses[indexOfResult + 1]).toString())
-            indexOfResult++
-            lens++
-        }
-        // теперь требуется просто оформить и записать все в выходной файл
-        File(outputName).bufferedWriter().use {
-            if (minuses.size == 1 && digitNumber(lhv) == digitNumber(minuses[0]) + 1) {
-                it.write("$lhv | $rhv\n-${minuses[0]}")
-                for (i in 0..digitNumber(lhv) - digitNumber(minuses[0]) + 1) it.write(" ")
-            } else {
-                it.write(" $lhv | $rhv\n-${minuses[0]}")
-                for (i in 0..digitNumber(lhv) - digitNumber(minuses[0]) + 2) it.write(" ")
-            }
-            it.write("$ans\n")
-            for (i in 0..digitNumber(minuses[0])) it.write("-")
-            var countOfTab = 0
-            for (i in results.indices) {
-                it.newLine()
-                countOfTab = digitNumber(minuses[0]) + 1 - results[i].length + i
-                if (i + 1 == minuses.size) countOfTab--
-                for (i in 0..countOfTab) it.write(" ")
-                it.write("${results[i]}\n")
-                if (i + 1 == minuses.size) break
-                for (i in 0 until countOfTab + results[i].length - digitNumber(minuses[i + 1])) it.write(" ")
-                it.write("-${minuses[i + 1]}\n")
-                if (digitNumber(minuses[i + 1]) < results[i].length){
-                    for (i in 0..countOfTab) it.write(" ")
-                    for (i in 0 until results[i].length) it.write("-")
-                    continue
-                }
-                for (i in 0 until countOfTab + results[i].length - digitNumber(minuses[i + 1])) it.write(" ")
-                for (i in 0..digitNumber(minuses[i + 1])) it.write("-")
-            }
+fun maxMinu(num: Int, rhv: Int): Int {
+    for (i in 9 downTo 0) {
+        if (rhv * i <= num) {
+            return i
         }
     }
+    return 0
+}
 
+fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
+    val countOfDigitsInLhv = digitNumber(lhv)
+    if (rhv > lhv) {
+        File(outputName).bufferedWriter().use {
+            if (countOfDigitsInLhv == 1) it.write(" $lhv | $rhv\n") else it.write("$lhv | $rhv\n")
+            it.write(
+                " ".repeat(if (countOfDigitsInLhv - 2 >= 0) countOfDigitsInLhv - 2 else 0) + "-0" + " ".repeat(3)
+                        + "0\n"
+            )
+            it.write("-".repeat(maxOf(countOfDigitsInLhv, 2)) + "\n")
+            if (countOfDigitsInLhv == 1) it.write(" ${lhv % rhv}") else it.write("${lhv % rhv}")
+        }
+        return
+    }
+    val countOfDigitsInRhv = digitNumber(rhv)
+    val number = lhv.toString().chunked(1).map { it.toInt() }
+    var ans = 0
+    val minuses = mutableListOf<Int>()
+    val results = mutableListOf<String>()
+    val firstDig = if (number.take(countOfDigitsInRhv).joinToString(separator = "").toInt() >= rhv) {
+        number.take(countOfDigitsInRhv).joinToString(separator = "").toInt()
+    } else {
+        number.take(countOfDigitsInRhv + 1).joinToString(separator = "").toInt()
+    }
+    minuses.add(rhv * maxMinu(firstDig, rhv))
+    ans = ans * 10 + maxMinu(firstDig, rhv)
+    var indexOfResult = 0
+    var lens = digitNumber(minuses[indexOfResult])
+    results.add((firstDig - minuses[indexOfResult]).toString())
+    while (lhv - ans * rhv > rhv) {
+        results[indexOfResult] = results[indexOfResult] + number[lens]
+        minuses.add(rhv * maxMinu(results[indexOfResult].toInt(), rhv))
+        ans = ans * 10 + maxMinu(results[indexOfResult].toInt(), rhv)
+        results.add((results[indexOfResult].toInt() - minuses[indexOfResult + 1]).toString())
+        indexOfResult++
+        lens++
+    }
+    File(outputName).bufferedWriter().use {
+        if (minuses.size == 1 && countOfDigitsInLhv == digitNumber(minuses[0]) + 1) {
+            it.write("$lhv | $rhv\n")
+            it.write("-${minuses[0]}" + " ".repeat(countOfDigitsInLhv - digitNumber(minuses[0]) + 2) + "$ans\n")
+        } else {
+            it.write(" $lhv | $rhv\n")
+            it.write("-${minuses[0]}" + " ".repeat(countOfDigitsInLhv - digitNumber(minuses[0]) + 3) + "$ans\n")
+        }
+        it.write("-".repeat(digitNumber(minuses[0]) + 1) + "\n")
+        var countOfTab = 0
+        for (i in results.indices) {
+            countOfTab = digitNumber(minuses[0]) + 1 - results[i].length + i
+            if (i + 1 == minuses.size) countOfTab--
+            it.write(" ".repeat(countOfTab + 1) + "${results[i]}\n")
+            if (i + 1 == minuses.size) break
+            it.write(
+                " ".repeat(countOfTab + results[i].length - digitNumber(minuses[i + 1])) + "-${minuses[i + 1]}\n"
+            )
+            if (digitNumber(minuses[i + 1]) < results[i].length) {
+                it.write(" ".repeat(countOfTab + 1) + "-".repeat(results[i].length) + "\n")
+                continue
+            }
+            it.write(
+                " ".repeat(countOfTab + results[i].length - digitNumber(minuses[i + 1]))
+                        + "-".repeat(digitNumber(minuses[i + 1]) + 1) + "\n"
+            )
+        }
+    }
 }
 
