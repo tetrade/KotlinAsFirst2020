@@ -587,7 +587,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var ans = 0
         val minuses = mutableListOf<Int>()
         val results = mutableListOf<String>()
-        // тип String нужен только для того чтобы сохранять 0 в начале числа в некоторых случаях
+        // тип String нужен только для того чтобы сохранять 0 в начале чисел в некоторых случаях
         var firstDig = 0
         firstDig = if (number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt() >= rhv) {
             number.subList(0, digitNumber(rhv)).joinToString(separator = "").toInt()
@@ -615,8 +615,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         }
         // теперь требуется просто оформить и записать все в выходной файл
         File(outputName).bufferedWriter().use {
-            it.write(" $lhv | $rhv\n-${minuses[0]}")
-            for (i in 0..digitNumber(lhv) - digitNumber(minuses[0]) + 2) it.write(" ")
+            if (minuses.size == 1 && digitNumber(lhv) == digitNumber(minuses[0]) + 1) {
+                it.write("$lhv | $rhv\n-${minuses[0]}")
+                for (i in 0..digitNumber(lhv) - digitNumber(minuses[0]) + 1) it.write(" ")
+            } else {
+                it.write(" $lhv | $rhv\n-${minuses[0]}")
+                for (i in 0..digitNumber(lhv) - digitNumber(minuses[0]) + 2) it.write(" ")
+            }
             it.write("$ans\n")
             for (i in 0..digitNumber(minuses[0])) it.write("-")
             var countOfTab = 0
