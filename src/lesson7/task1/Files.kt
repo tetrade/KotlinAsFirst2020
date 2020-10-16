@@ -354,22 +354,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
         }
 
+        var startOfText = true
         var text = listOf<String>()
         var prevS = false
         it.write("<html>\n<body>\n<p>")
         for (bufftext in File(inputName).readLines()) {
-            if (bufftext.isEmpty() && !prevS) {
+            if (bufftext.isEmpty() && !prevS && !startOfText) {
                 it.write("</p>")
                 prevS = true
                 continue
             }
-            if (bufftext.isNotEmpty() && prevS) {
+            if (bufftext.isNotEmpty() && prevS && !startOfText) {
                 it.write("<p>")
                 prevS = false
             }
             sumb = 0
             text = bufftext.plus(" ").chunked(1)
             while (sumb != text.size - 1) {
+                if (startOfText) startOfText = !startOfText
                 when {
                     text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> writeInFile("**")
                     text[sumb] == "*" -> writeInFile("*")
