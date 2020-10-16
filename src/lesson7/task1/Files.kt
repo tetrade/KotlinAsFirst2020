@@ -566,7 +566,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             if (digitNumber(lhv) == 1){
                 it.write(" ${lhv % rhv}")
             } else {
-                it.write("$lhv | $rhv\n")
+                it.write("${lhv % rhv}")
             }
         }
         return
