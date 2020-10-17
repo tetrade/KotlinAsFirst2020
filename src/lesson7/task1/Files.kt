@@ -146,13 +146,13 @@ fun centerFile(inputName: String, outputName: String) {
         longestStr = maxOf(longestStr, i.trim().length)
     }
     File(outputName).bufferedWriter().use {
-        var countOfS = 0
         for (i in File(inputName).readLines()) {
             if (longestStr == i.trim().length) {
                 it.write(i.trim() + "\n")
             } else if (longestStr % 2 != i.trim().length % 2 && longestStr - i.trim().length == 1) {
                 it.write(i.trim() + "\n")
             } else {
+                var countOfS = 0
                 while (countOfS != longestStr / 2 - i.trim().length / 2) {
                     countOfS++
                 }
@@ -353,7 +353,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         numberLine++
     }
     File(outputName).bufferedWriter().use {
-        fun writeInFile(sumbToWrite: String):Int {
+        fun writeInFile(sumbToWrite: String): Int {
             if (sumbToWrite in commandsIn) {
                 it.write(listOfCommands[sumbToWrite]!![1])
                 commandsIn.remove(sumbToWrite)
@@ -615,9 +615,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             it.write("-${minuses[0]}" + " ".repeat(countOfDigitsInLhv - digitNumber(minuses[0]) + 3) + "$ans\n")
         }
         it.write("-".repeat(digitNumber(minuses[0]) + 1) + "\n")
-        var countOfTab = 0
         for (i in results.indices) {
-            countOfTab = digitNumber(minuses[0]) + 1 - results[i].length + i
+            var countOfTab = digitNumber(minuses[0]) + 1 - results[i].length + i
             if (i + 1 == minuses.size) countOfTab--
             it.write(" ".repeat(countOfTab + 1) + "${results[i]}\n")
             if (i + 1 == minuses.size) break
