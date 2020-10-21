@@ -4,10 +4,8 @@ package lesson7.task1
 
 import lesson3.task1.digitNumber
 import java.io.File
-import kotlin.math.abs
-import kotlin.math.log
-import kotlin.math.max
-import kotlin.math.pow
+import java.util.ArrayDeque
+import kotlin.math.*
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -158,7 +156,6 @@ fun centerFile(inputName: String, outputName: String) {
                 }
                 if (longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS--
                 it.write(" ".repeat(countOfS) + i.trim() + "\n")
-                countOfS = 0
             }
         }
     }
@@ -339,9 +336,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "~~" to listOf("<s>", "</s>")
     )
     var firstLastEmptyLines = -1
-    var numberLine = 1
     var nextEmpty = true
-    for (line in File(inputName).readLines()) {
+    for ((numberLine, line) in File(inputName).readLines().withIndex()) {
         if (line.trim().isEmpty() && nextEmpty) {
             firstLastEmptyLines = numberLine
             nextEmpty = false
@@ -350,7 +346,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             firstLastEmptyLines = -1
             nextEmpty = true
         }
-        numberLine++
     }
     File(outputName).bufferedWriter().use {
         fun writeInFile(sumbToWrite: String): Int {
@@ -368,9 +363,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var startOfText = true
         var prevS = false
         it.write("<html>\n<body>\n<p>")
-        numberLine = 0
-        for (bufftext in File(inputName).readLines()) {
-            numberLine++
+        for ((numberLine, bufftext) in File(inputName).readLines().withIndex()) {
             if (bufftext.trim().isEmpty() && !prevS && !startOfText) {
                 if (firstLastEmptyLines == -1 || numberLine < firstLastEmptyLines) it.write("</p>\n<p>")
                 prevS = true
@@ -380,10 +373,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             var sumb = 0
             val text = bufftext.plus(" ").chunked(1)
             while (sumb != text.size - 1) {
-                if (startOfText) startOfText = !startOfText
+                if (startOfText) startOfText = false
                 when {
                     text[sumb] + text[sumb + 1] == "**" && sumb + 1 <= text.size - 1 -> sumb += writeInFile("**")
-
                     text[sumb] == "*" -> sumb += writeInFile("*")
                     text[sumb] + text[sumb + 1] == "~~" && sumb + 1 <= text.size - 1 -> sumb += writeInFile("~~")
                     else -> {
@@ -573,9 +565,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val countOfDigitsInLhv = digitNumber(lhv)
     if (rhv > lhv) {
         File(outputName).bufferedWriter().use {
-            if (countOfDigitsInLhv == 1) it.write(" $lhv | $rhv\n") else it.write("$lhv | $rhv\n")
+            if (countOfDigitsInLhv == 1) it.write(" ")
+            it.write("$lhv | $rhv\n")
             it.write(
-                " ".repeat(if (countOfDigitsInLhv - 2 >= 0) countOfDigitsInLhv - 2 else 0) + "-0" + " ".repeat(3)
+                " ".repeat(max(countOfDigitsInLhv - 2, 0)) + "-0" + " ".repeat(3)
                         + "0\n"
             )
             it.write("-".repeat(maxOf(countOfDigitsInLhv, 2)) + "\n")
@@ -588,11 +581,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var ans = 0
     val minuses = mutableListOf<Int>()
     val results = mutableListOf<String>()
-    val firstDig = if (number.take(countOfDigitsInRhv).joinToString(separator = "").toInt() >= rhv) {
-        number.take(countOfDigitsInRhv).joinToString(separator = "").toInt()
-    } else {
-        number.take(countOfDigitsInRhv + 1).joinToString(separator = "").toInt()
-    }
+    var firstDig = number.take(countOfDigitsInRhv).joinToString(separator = "").toInt()
+    if (firstDig < rhv) firstDig++
     minuses.add(rhv * maxMinu(firstDig, rhv))
     ans = ans * 10 + maxMinu(firstDig, rhv)
     var indexOfResult = 0
@@ -633,5 +623,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             )
         }
     }
-}
 
+}
+fun main() {
+    var c = ArrayDeque<String>()
+    c.plusElement("qw")
+}

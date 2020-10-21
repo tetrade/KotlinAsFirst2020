@@ -267,12 +267,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val stack = ArrayDeque<String>()
     while (digitOfCurrentCommand != listOfCommands.size && curLimit != 0) {
         when (listOfCommands[digitOfCurrentCommand]) {
-            "+" -> {
-                curCell[digitOfCurrentCell] += 1
-            }
-            "-" -> {
-                curCell[digitOfCurrentCell] -= 1
-            }
+            "+" -> curCell[digitOfCurrentCell] += 1
+            "-" -> curCell[digitOfCurrentCell] -= 1
             ">" -> {
                 if (digitOfCurrentCell + 1 == curCell.size) throw IllegalStateException()
                 digitOfCurrentCell++
