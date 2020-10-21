@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import kotlinx.html.attributes.stringSetDecode
 import lesson3.task1.digitNumber
 import java.io.File
 import java.util.ArrayDeque
@@ -87,17 +88,14 @@ fun deleteMarked(inputName: String, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val countOfWords = mutableMapOf<String, Int>()
-    for (i in substrings) {
-        countOfWords[i] = 0
-    }
+    for (i in substrings) countOfWords[i] = 0
     val text = File(inputName).readText().toLowerCase()
-    var lengthOfSub: Int
     for (sub in countOfWords.keys) {
-        lengthOfSub = sub.length
-        for (typo in text.indices) {
-            if (typo + lengthOfSub <= text.length && text.substring(typo, typo + lengthOfSub) == sub.toLowerCase()) {
-                countOfWords[sub] = countOfWords[sub]!! + 1
-            }
+        val lowerSub = sub.toLowerCase()
+        var index = -1
+        while (text.indexOf(lowerSub, index + 1) != -1) {
+            index = text.indexOf(lowerSub, index + 1)
+            countOfWords[sub] = countOfWords[sub]!! + 1
         }
     }
     return countOfWords
@@ -145,13 +143,14 @@ fun centerFile(inputName: String, outputName: String) {
     }
     File(outputName).bufferedWriter().use {
         for (i in File(inputName).readLines()) {
-            if (longestStr == i.trim().length) {
+            val str = i.trim().length
+            if (longestStr == str) {
                 it.write(i.trim() + "\n")
-            } else if (longestStr % 2 != i.trim().length % 2 && longestStr - i.trim().length == 1) {
+            } else if (longestStr % 2 != str % 2 && longestStr - str == 1) {
                 it.write(i.trim() + "\n")
             } else {
-                var countOfS = longestStr / 2 - i.trim().length / 2
-                if (longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS--
+                var countOfS = longestStr / 2 - str / 2
+                if (longestStr % 2 == 0 && str % 2 == 1) countOfS--
                 it.write(" ".repeat(countOfS) + i.trim() + "\n")
             }
         }
@@ -326,7 +325,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val commandsIn = mutableListOf<String>()
+    val commandsIn = ArrayDeque<String>()
     val listOfCommands = mapOf<String, List<String>>(
         "*" to listOf("<i>", "</i>"),
         "**" to listOf("<b>", "</b>"),
@@ -346,13 +345,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
     File(outputName).bufferedWriter().use {
         fun writeInFile(sumbToWrite: String): Int {
-            if (sumbToWrite in commandsIn) {
-                it.write(listOfCommands[sumbToWrite]!![1])
-                commandsIn.remove(sumbToWrite)
+            if (sumbToWrite == commandsIn.peek()) {
+                it.write(listOfCommands[commandsIn.pop()]!![1])
             } else {
                 it.write(listOfCommands[sumbToWrite]!![0])
-                commandsIn.add(sumbToWrite)
-
+                commandsIn.push(sumbToWrite)
             }
             return sumbToWrite.length
         }
@@ -569,7 +566,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                         + "0\n"
             )
             it.write("-".repeat(maxOf(countOfDigitsInLhv, 2)) + "\n")
-            if (countOfDigitsInLhv == 1) it.write(" ${lhv % rhv}") else it.write("${lhv % rhv}")
+            if (countOfDigitsInLhv == 1) it.write(" ")
+            it.write("${lhv % rhv}")
         }
         return
     }
@@ -622,3 +620,5 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
 
 }
+
+
