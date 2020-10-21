@@ -579,7 +579,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val minuses = mutableListOf<Int>()
     val results = mutableListOf<String>()
     var firstDig = number.take(countOfDigitsInRhv).joinToString(separator = "").toInt()
-    if (firstDig < rhv) firstDig++
+    if (firstDig < rhv) firstDig = number.take(countOfDigitsInRhv + 1).joinToString(separator = "").toInt()
     minuses.add(rhv * maxMinu(firstDig, rhv))
     ans = ans * 10 + maxMinu(firstDig, rhv)
     var indexOfResult = 0
@@ -621,8 +621,4 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         }
     }
 
-}
-fun main() {
-    var c = ArrayDeque<String>()
-    c.plusElement("qw")
 }
