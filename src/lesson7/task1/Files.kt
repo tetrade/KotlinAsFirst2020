@@ -150,10 +150,7 @@ fun centerFile(inputName: String, outputName: String) {
             } else if (longestStr % 2 != i.trim().length % 2 && longestStr - i.trim().length == 1) {
                 it.write(i.trim() + "\n")
             } else {
-                var countOfS = 0
-                while (countOfS != longestStr / 2 - i.trim().length / 2) {
-                    countOfS++
-                }
+                var countOfS = longestStr / 2 - i.trim().length / 2
                 if (longestStr % 2 == 0 && i.trim().length % 2 == 1) countOfS--
                 it.write(" ".repeat(countOfS) + i.trim() + "\n")
             }
