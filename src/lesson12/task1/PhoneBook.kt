@@ -17,8 +17,11 @@ package lesson12.task1
  *
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
+
+
 class PhoneBook {
-    var humansInPhoneBook = mutableMapOf<String, MutableList<String>?>()
+    private val humansInPhoneBook = mutableMapOf<String, MutableSet<String>>()
+
     /**
      * Добавить человека.
      * Возвращает true, если человек был успешно добавлен,
@@ -27,7 +30,7 @@ class PhoneBook {
      */
     fun addHuman(name: String): Boolean {
         if (name in humansInPhoneBook.keys) return false
-        humansInPhoneBook[name] = null
+        humansInPhoneBook[name] = mutableSetOf()
         return true
     }
 
@@ -48,12 +51,9 @@ class PhoneBook {
      */
 
     fun addPhone(name: String, phone: String): Boolean {
-        if (name in humansInPhoneBook.keys && phone !in humansInPhoneBook.values) {
-            humansInPhoneBook[name]!!.add(phone)
-            return true
-        } else {
-            return false
-        }
+        for (phones in humansInPhoneBook.values) { if (phone in phones) return false }
+        humansInPhoneBook[name]?.add(phone) ?: return false
+        return true
     }
 
     /**
@@ -62,32 +62,50 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    fun removePhone(name: String, phone: String): Boolean = TODO()
+    fun removePhone(name: String, phone: String): Boolean {
+        if (phone in humansInPhoneBook[name] ?: emptyList()) {
+            humansInPhoneBook[name]?.remove(phone) ?: return false
+            return true
+        }
+        return false
+    }
 
     /**
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    fun phones(name: String): Set<String> = TODO()
+    fun phones(name: String): Set<String> = humansInPhoneBook[name]?.toSet() ?: emptySet()
 
     /**
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = TODO()
+    fun humanByPhone(phone: String): String? {
+        for (name in humansInPhoneBook.keys) {
+            if (phone in humansInPhoneBook[name]!!) return name
+        }
+        return null
+    }
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean = TODO()
-}
+    override fun equals(other: Any?): Boolean {
+        if (other is PhoneBook && setOf(other.humansInPhoneBook.keys) == setOf(humansInPhoneBook.keys)) {
+            for (names in humansInPhoneBook.keys) {
+                if (phones(names) == other.phones(names)) return true
+            }
+        }
+        return false
+    }
 
-fun main() {
-    var aa = mutableMapOf<String, List<Int>>(
-        "qwe" to listOf(1, 2 ,3)
-    )
-    print(aa.remove("qwe"))
-    print(aa.isEmpty())
+    override fun hashCode(): Int {
+        var hash = 0
+        for (name in humansInPhoneBook.keys) {
+            hash += humansInPhoneBook[name].hashCode() / name.hashCode()
+        }
+        return hash
+    }
 }
