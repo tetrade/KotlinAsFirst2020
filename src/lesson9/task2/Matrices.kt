@@ -2,6 +2,7 @@
 
 package lesson9.task2
 
+import lesson9.task1.Cell
 import lesson9.task1.Matrix
 import lesson9.task1.createMatrix
 
@@ -60,7 +61,36 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    var value = 1
+    val matrix = createMatrix(height, width, 1)
+    var start = Cell(0, 0)
+    var h = height
+    var w = width
+    while (value != (height * width) + 1) {
+        for (i in start.column until w) {
+            matrix.set(start.row, i, value)
+            value++
+        }
+        if (value == (height * width) + 1) return matrix
+        for (i in start.row + 1 until h) {
+            matrix.set(i, w - 1, value)
+            value++
+        }
+        for (i in w - 2 downTo start.column) {
+            matrix.set(h - 1, i, value)
+            value++
+        }
+        for (i in h - 2 downTo start.row + 1) {
+            matrix.set(i, width - w, value)
+            value++
+        }
+        start = Cell(start.row + 1, start.column + 1)
+        w--
+        h--
+    }
+    return matrix
+}
 
 /**
  * Сложная (5 баллов)
@@ -76,7 +106,25 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateRectangles(height: Int, width: Int): Matrix<Int> {
+    var value = 2
+    val matrix = createMatrix(height, width, 1)
+    var start = Cell(1, 1)
+    var h = height - 1
+    var w = width - 1
+    while (value <= height / 2 + 1) {
+        for (i in start.column until w) matrix.set(start.row, i, value)
+        if (value > height / 2) return matrix
+        for (i in start.row + 1 until h) matrix.set(i, w - 1, value)
+        for (i in w - 2 downTo start.column) matrix.set(h - 1, i, value)
+        for (i in h - 2 downTo start.row + 1) matrix.set(i, width - w, value)
+        start = Cell(start.row + 1, start.column + 1)
+        w--
+        h--
+        value++
+    }
+    return matrix
+}
 
 /**
  * Сложная (5 баллов)

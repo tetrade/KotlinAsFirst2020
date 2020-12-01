@@ -4,6 +4,8 @@ package lesson6.task1
 
 import java.lang.IndexOutOfBoundsException
 import java.util.ArrayDeque
+import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -89,7 +91,33 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val mounth = listOf<String>(
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября"
+    )
+    try {
+        val dig = digital.split(".").map { it.toInt() }
+        if (!digital.matches(Regex("""(^(\d{2})\.(\d{2})\.(\d{1,4})${'$'})""")) || dig[0] > daysInMonth(
+                dig[1],
+                dig[2]
+            ) || dig[0] < 1
+        ) return ""
+        return "${dig[0]} ${mounth[dig[1] - 1]} ${dig[2]}"
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
+
 
 /**
  * Средняя (4 балла)
@@ -166,7 +194,15 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val words = str.split(" ").map { it.toLowerCase() }
+    var counter = 0
+    for ((index, word) in words.withIndex()) {
+        if (words.lastIndex != index && words[index] == words[index + 1]) return counter
+        counter += word.length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
@@ -256,7 +292,7 @@ fun checkForException(str: String): Boolean {
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!checkForException(commands)) throw IllegalArgumentException("Description")
     var digitOfCurrentCell = cells / 2
-    val curCell = Array(cells) { 0 }
+    val curCell = Array(cells) {0}
     var curLimit = limit
     val listOfBracket = mapOf(
         "[" to ArrayDeque<Int>(),
