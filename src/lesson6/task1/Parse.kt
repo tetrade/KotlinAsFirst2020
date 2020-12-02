@@ -103,7 +103,8 @@ fun dateDigitToStr(digital: String): String {
         "августа",
         "сентября",
         "октября",
-        "ноября"
+        "ноября",
+        "декабря"
     )
     try {
         val dig = digital.split(".").map { it.toInt() }
