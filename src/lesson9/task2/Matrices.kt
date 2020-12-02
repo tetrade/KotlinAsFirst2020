@@ -107,8 +107,9 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
  *  1  1  1  1  1  1
  */
 fun generateRectangles(height: Int, width: Int): Matrix<Int> {
-    var value = 2
     val matrix = createMatrix(height, width, 1)
+    if (height == 2 || width == 2) return matrix
+    var value = 2
     var start = Cell(1, 1)
     var h = height - 1
     var w = width - 1

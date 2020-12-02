@@ -107,7 +107,7 @@ fun dateDigitToStr(digital: String): String {
     )
     try {
         val dig = digital.split(".").map { it.toInt() }
-        if (!digital.matches(Regex("""(^(\d{2})\.(\d{2})\.(\d{1,4})${'$'})""")) || dig[0] > daysInMonth(
+        if (!digital.matches(Regex("""(^(\d{2})\.(\d{2})\.(\d+)${'$'})""")) || dig[0] > daysInMonth(
                 dig[1],
                 dig[2]
             ) || dig[0] < 1
