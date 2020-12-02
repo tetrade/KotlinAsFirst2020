@@ -77,6 +77,7 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
             matrix.set(i, w - 1, value)
             value++
         }
+        if (value == (height * width) + 1) return matrix
         for (i in w - 2 downTo start.column) {
             matrix.set(h - 1, i, value)
             value++
@@ -108,7 +109,7 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
  */
 fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     val matrix = createMatrix(height, width, 1)
-    if (height == 2 || width == 2) return matrix
+    if (height == 2 || width == 2 || height == 1 || width == 1) return matrix
     var value = 2
     var start = Cell(1, 1)
     var h = height - 1
