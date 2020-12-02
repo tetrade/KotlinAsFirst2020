@@ -93,8 +93,9 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (sub in countOfWords.keys) {
         val lowerSub = sub.toLowerCase()
         var index = -1
-        while (text.indexOf(lowerSub, index + 1) != -1) {
+        while (true) {
             index = text.indexOf(lowerSub, index + 1)
+            if (index == -1) break
             countOfWords[sub] = countOfWords[sub]!! + 1
         }
     }
