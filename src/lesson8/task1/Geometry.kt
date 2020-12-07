@@ -181,10 +181,7 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line {
-    val _angle = acos(s.begin.distance(Point(s.end.x, s.begin.y)) / s.begin.distance(s.end))
-    return Line(s.begin, _angle)
-}
+fun lineBySegment(s: Segment): Line = TODO()
 
 /**
  * Средняя (3 балла)
