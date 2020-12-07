@@ -191,10 +191,7 @@ fun lineBySegment(s: Segment): Line {
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line {
-    val _angle = acos(a.distance(Point(b.x, a.y)) / a.distance(b))
-    return Line(a, _angle)
-}
+fun lineByPoints(a: Point, b: Point): Line = TODO()
 
 /**
  * Сложная (5 баллов)
