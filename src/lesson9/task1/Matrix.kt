@@ -91,11 +91,9 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, val e: E)
 
 
     override fun toString(): String {
-        var out = ""
-        for (row in 1..height) {
-            out += m[row - 1].joinToString(separator = " ", postfix = "\n")
-        }
-        return out
+        val out = mutableListOf<String>()
+        for (row in 1..height) { out.add(m[row - 1].joinToString(separator = " ")) }
+        return out.joinToString(separator = "\n")
     }
 }
 

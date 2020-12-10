@@ -43,6 +43,7 @@ internal class PhoneBookTest {
     @Tag("6")
     fun removePhone() {
         val book = PhoneBook()
+        assertFalse(book.removePhone("Зубенко Михаил", "+79226666"))
         assertTrue(book.addHuman("Иванов Петр"))
         assertTrue(book.addHuman("Васильев Дмитрий"))
         assertTrue(book.addPhone("Иванов Петр", "+79211234567"))

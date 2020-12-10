@@ -28,11 +28,8 @@ class PhoneBook {
      * и false, если человек с таким именем уже был в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun addHuman(name: String): Boolean {
-        if (name in humansInPhoneBook.keys) return false
-        humansInPhoneBook[name] = mutableSetOf()
-        return true
-    }
+    fun addHuman(name: String): Boolean = humansInPhoneBook.putIfAbsent(name, mutableSetOf()) == null
+
 
     /**
      * Убрать человека.
@@ -63,7 +60,7 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean {
-        if (phone in humansInPhoneBook[name] ?: emptyList()) {
+        if (phone in humansInPhoneBook.getOrDefault(name, mutableSetOf())) {
             humansInPhoneBook[name]?.remove(phone) ?: return false
             return true
         }
